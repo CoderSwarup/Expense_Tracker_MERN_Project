@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const UserRouter = require("./Routes/UserRoutes,js");
 const cookieParser = require("cookie-parser");
+const CategoryRouter = require("./Routes/CategoryRoute");
 const app = express();
 
 //MiddleWare
@@ -15,7 +16,8 @@ app.get("/", (req, re) => {
   res.send("Hello Welcome Back");
 });
 
-app.use("/api/v1/auth/", UserRouter);
+app.use("/api/v1/auth/", UserRouter); // user Routes
+app.use("/api/v1/category", CategoryRouter); // Category Routes
 
 // Error Handler That Stop the Server Creash If the Some Error Create at a time of Any req and res Than it Will Gives The Small Error Message
 app.use(function (error, rq, res, next) {
