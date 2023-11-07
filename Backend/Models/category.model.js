@@ -10,21 +10,19 @@ const CategorySchema = new mongoose.Schema(
 
     ammountSpend: [
       {
-        ammount: {
-          type: Number,
-          default: 123333,
-        },
-        createTime: {
-          type: String,
-        },
-        createdDate: {
-          type: String,
+        expense: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Expense",
         },
       },
     ],
     totalAmountSpend: {
       type: Number,
       default: 0,
+    },
+    createduser: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Reference to the Category model
     },
   },
   { timestamps: true }

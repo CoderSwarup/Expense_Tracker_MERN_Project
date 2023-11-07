@@ -1,10 +1,11 @@
 const categoryModel = require("../Models/category.model");
-const moment = require("moment");
+// const moment = require("moment");
 
 //Create Category
 exports.CreateNewCategoryController = async (req, res) => {
   try {
     const { name } = req.body;
+    const createduser = req.user._id;
     if (!name) {
       return res.status(300).send({
         success: false,
@@ -31,7 +32,7 @@ exports.CreateNewCategoryController = async (req, res) => {
     //   },
     // ];
 
-    await categoryModel({ name }).save();
+    await categoryModel({ name, createduser }).save();
     return res.status(200).send({
       success: true,
       message: "Category Created Successfully",
@@ -118,7 +119,10 @@ exports.DeleteCategoryController = async (req, res) => {
 // Get all Categories
 exports.GetAllCategoriesController = async (req, res) => {
   try {
-    const Categories = await categoryModel.find({});
+    let cretedByuserCategory = req.user._id;
+    const Categories = await categoryModel.find({
+      createduser: cretedByuserCategory,
+    });
 
     return res.status(200).send({
       success: true,
