@@ -47,6 +47,8 @@ const UserSchema = new mongoose.Schema(
     resetPasswordExpired: {
       type: Date,
     },
+    verifyToken: String,
+    verifyTokenExpire: Date,
   },
   {
     timestamps: true,
@@ -85,6 +87,27 @@ UserSchema.methods.generatePasswordResetToken = function () {
 
     // console.log(this.resetPasswordToken.length);
     return this.resetPasswordToken;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+//Genarate Verify User Token
+UserSchema.methods.genrateVerificationToken = function () {
+  try {
+    // this resettoken genarate the random value
+    let resetToken = crypto.randomBytes(20).toString("hex");
+    // console.log(resetToken);
+
+    //hashing and adding to user schema
+    let verifyToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    let verifyTokenExpire = new Date(Date.now() + 15 * 60 * 1000);
+
+    return { verifyToken, verifyTokenExpire };
   } catch (error) {
     console.log("error", error);
   }

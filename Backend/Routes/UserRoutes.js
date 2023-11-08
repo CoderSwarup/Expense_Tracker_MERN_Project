@@ -8,12 +8,16 @@ const {
   GetUserDeatils,
   UpdatePasswordController,
   UpdateProfileController,
+  VerifyUserController,
 } = require("../Controllers/UserController");
 const { isAuthenticatedUser } = require("../Middleware/auth");
 const UserRouter = express.Router();
 
 // Register User Route
 UserRouter.route("/register").post(RegisterUserController);
+
+//Verify User Route
+UserRouter.put("/verify/user/:token", VerifyUserController);
 
 //Login User
 UserRouter.post("/login", LoginUserController);

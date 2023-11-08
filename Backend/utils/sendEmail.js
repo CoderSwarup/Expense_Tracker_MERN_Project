@@ -19,7 +19,7 @@ exports.SendEmail = async (options, res) => {
       from: process.env.NODEMAILER_EMAIL,
       to: options?.email,
       subject: options?.subject,
-      text: options?.message,
+      html: options?.message,
     };
 
     await TransPorter.sendMail(mailOptions);

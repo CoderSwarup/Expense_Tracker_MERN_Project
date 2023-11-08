@@ -1,6 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
-const UserRouter = require("./Routes/UserRoutes,js");
+const UserRouter = require("./Routes/UserRoutes.js");
 const cookieParser = require("cookie-parser");
 const CategoryRouter = require("./Routes/CategoryRoute");
 const ExpenseRouter = require("./Routes/ExpenseRoute");
@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(morgan("dev")); // Use To Check Which Route is Hit And How much time Get the response to the user
 
 // Routes
-app.get("/", (req, re) => {
+app.get("/", (req, res) => {
   console.log("request received");
   res.send("Hello Welcome Back");
 });

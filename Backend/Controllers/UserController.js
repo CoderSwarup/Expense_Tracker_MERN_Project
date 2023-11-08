@@ -1,14 +1,17 @@
+require("dotenv").config();
 const userModel = require("../Models/user.model");
 const bcrypt = require("bcrypt");
 const TokenSender = require("../utils/TokenSender");
 const { errorMonitor } = require("nodemailer/lib/xoauth2");
 const { SendEmail } = require("../utils/sendEmail");
+const cloudinary = require("cloudinary");
 
 //Register User
 exports.RegisterUserController = async (req, res) => {
   try {
-    const { name, email, password, cpassword } = req.body;
+    const { name, email, password, cpassword } = req;
 
+    console.log(req.body.avatar);
     if ((!name, !email, !password, !cpassword)) {
       return res
         .status(401)
@@ -21,28 +24,124 @@ exports.RegisterUserController = async (req, res) => {
         .send({ succcess: false, message: "Password Must Be Match!" });
     }
 
-    const hashPassword = await bcrypt.hash(password, 10);
+    // const FindUserAlredyExists = await userModel.findOne({
+    //   email,
+    // });
 
-    userModel({
-      name,
-      email,
-      password: hashPassword,
-      avatar: {
-        public_id: "33838",
-        url: "sjssjsj",
-      },
-    })
-      .save()
-      .then(() => {
-        res.status(200).send({
-          succcess: true,
-          message: "User Register Successfully Please Verify Email",
-        });
-      });
+    // if (FindUserAlredyExists) {
+    //   return res.status(300).send({
+    //     succcess: false,
+    //     message: "User Is Alredy Exists",
+    //   });
+    // }
+
+    // const hashPassword = await bcrypt.hash(password, 10);
+
+    // const user = await userModel({
+    //   name,
+    //   email,
+    //   password: hashPassword,
+    //   avatar: {
+    //     public_id: "33838",
+    //     url: "sjssjsj",
+    //   },
+    // });
+
+    // const VerifyToken = user.genrateVerificationToken();
+    // user.verifyToken = VerifyToken.verifyToken;
+    // user.verifyTokenExpire = VerifyToken.verifyTokenExpire;
+
+    // const Message = `
+    // <!DOCTYPE html>
+    // <html>
+    // <head>
+    //   <meta charset="utf-8">
+    //   <title>Verify Your Email Address</title>
+    // </head>
+    // <body>
+
+    //         <div style="text-align: left;">
+    //           <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Welcome to the Expense Tracker App!</h1>
+    //           <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">We're excited to have you as a part of our community. To start managing your expenses, please verify your email address by clicking the button below:</p>
+    //           <a href="${process.env.FRONTEND_URL}/verify/user/${VerifyToken.verifyToken}" style="display: inline-block; padding: 12px 24px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 4px;">Verify Your Email</a>
+    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">If the button above doesn't work, you can also copy and paste the following link into your web browser:</p>
+    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 10px;">${process.env.FRONTEND_URL}/verify/user/${VerifyToken.verifyToken}</p>
+    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Please note that this verification link is valid for the next 15 minutes. After that, you may need to request a new verification link.</p>
+    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">If you didn't create an account with us, please ignore this email.</p>
+    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Thank you for choosing the Expense Tracker App! If you have any questions or need assistance, please don't hesitate to reach out to our support team at [SUPPORT_EMAIL_ADDRESS].</p>
+    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Sincerely,<br>Swarup Bhise<br>Expense Tracker</p>
+    //        </div>
+    // </body>
+    // </html>
+    // `;
+
+    // let EmailSend = await SendEmail(
+    //   {
+    //     email: user.email,
+    //     subject: `Expense Tracker App Verification`,
+    //     message: Message,
+    //   },
+    //   res
+    // );
+    // if (!EmailSend) {
+    //   return res.status(500).send({
+    //     success: false,
+    //     message: "Please Try Again error in sending verification mail!",
+    //   });
+    // }
+
+    // await user.save();
+
+    return res.status(200).send({
+      succcess: true,
+      message: "User Register Successfully Please Verify Email",
+    });
   } catch (error) {
-    res.status(400).send({
+    if (error instanceof Error) {
+      return res.status(400).json({
+        success: false,
+        message: "Error In Registration!" + error.message,
+      });
+    }
+    return res.status(400).send({
       succcess: false,
       message: "Error in Register User",
+    });
+  }
+};
+
+// Check The User Is Verified Or Not
+exports.VerifyUserController = async (req, res) => {
+  try {
+    let verifytoken = req.params.token;
+
+    // console.log("TOKEN : ", token);
+    const user = await userModel.findOne({
+      verifyToken: verifytoken,
+      verifyTokenExpire: { $gt: new Date(Date.now()) },
+    });
+
+    if (!user) {
+      return res.status(400).send({
+        success: false,
+        message: "Sorry Try Again Verify Token Is Expired OR Wrong Topken!!",
+      });
+    }
+
+    user.isValidUser = true;
+    user.verifyToken = undefined;
+    user.verifyTokenExpire = undefined;
+
+    await user.save();
+
+    return res.status(200).send({
+      succcess: true,
+      message: "Your Validate SuccessFully Congragulations!!!",
+    });
+  } catch (error) {
+    return res.status(500).send({
+      succcess: false,
+      message: "Something Went Wrong in Verify User",
     });
   }
 };
@@ -145,15 +244,15 @@ exports.ForgotPasswordController = async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     //genarate on frontend Url
-    // const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
-    const resetPasswordUrl = `http://extracker.com/password/reset/${resetToken}`;
+    const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+    // const resetPasswordUrl = `http://extracker.com/password/reset/${resetToken}`;
 
     const message = `Your Reset Password Token is  == \n\n  ${resetPasswordUrl} \n\n if You Have Not requested this Email then , Please Error `;
 
     let EmailSend = await SendEmail(
       {
         email: user.email,
-        subject: `SamEcom Password Recovery`,
+        subject: `Expense Tracker Password Recovery`,
         message,
       },
       res
@@ -199,14 +298,16 @@ exports.ResetPasswordController = async (req, res) => {
       });
     }
 
-    user.password = req.body.password;
+    const hashPassword = await bcrypt.hash(req.body.password, 10);
+
+    user.password = hashPassword;
     user.resetPasswordToken = undefined;
     user.resetPasswordExpired = undefined;
 
     await user.save();
-    sendToken(user, 200, "Password Changed Succefully", res);
+    TokenSender(user, 200, "Password Changed Succefully", res);
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     return res.status(400).send({
       success: false,
       message: "Somthing Went Wrong in Reset Password",
