@@ -1,4 +1,4 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +39,102 @@
 
 .read-the-docs {
   color: #888;
+} */
+/* #F44336;
+#121212;
+#1D1D1D;
+#0077FF;
+#323232;
+#5453E0;
+#262626;
+#E91E63;
+#FFFFFF;
+#C4C5C5;
+#20BD5F;
+#5B5B5B; */
+
+/*  Light Theme Color  */
+/* body {
+  background-color: #f2f2f2;
+  color: #323232;
 }
+
+.primary-button {
+  background-color: #ffb2a8;
+  color: #ffffff;
+}
+
+.secondary-button {
+  background-color: #ebebeb;
+  color: #323232;
+}
+
+.success-message {
+  color: #77d2c8;
+}
+
+.danger-message {
+  color: #f75252;
+}
+
+.warning-message {
+  color: #fdde00;
+}
+
+.info-message {
+  color: #89cff0;
+}
+
+.muted-text {
+  color: #a6a6a6;
+}
+
+.link {
+  color: #0089ff;
+} */
+
+/* Dark theme colors */
+/* 
+body {
+  background-color: #121212;-
+  background: rgb(0, 0, 33);
+  color: #ffffff;
+}
+
+nav {
+  background-color: rgb(18, 18, 62);
+}
+
+.primary-button {
+  background-color: #f44336;
+  color: #ffffff;
+}
+
+.secondary-button {
+  background-color: #1d1d1d;
+  color: #ffffff;
+}
+
+.success-message {
+  color: #20bd5f;
+}
+
+.danger-message {
+  color: #e91e63;
+}
+
+.warning-message {
+  color: #5b5b5b;
+}
+
+.info-message {
+  color: #5453e0;
+}
+
+.muted-text {
+  color: #c4c5c5;
+}
+
+.link {
+  color: #0077ff;
+} */
