@@ -1,8 +1,16 @@
 export const LightTheme = {
   color: {
     body: {
-      backgroundColor: "#f2f2f2",
+      backgroundColor: "rgb(232, 205, 255)",
       color: "#323232",
+    },
+    nav: {
+      backgroundColor: "rgba(169, 19, 250, 0.877)",
+      color: "#ffffff",
+    },
+    footer: {
+      backgroundColor: "rgba(169, 19, 250, 0.877)",
+      color: "#ffffff",
     },
     primaryButton: {
       backgroundColor: "#ffb2a8",
@@ -38,7 +46,12 @@ export const DarkTheme = {
       color: "#ffffff",
     },
     nav: {
-      backgroundColor: "rgb(18, 18, 62)",
+      backgroundColor: "rgb(80, 21, 207)",
+      color: "#fff",
+    },
+    footer: {
+      backgroundColor: "rgb(80, 21, 207)",
+      color: "#fff",
     },
     primaryButton: {
       backgroundColor: "#f44336",

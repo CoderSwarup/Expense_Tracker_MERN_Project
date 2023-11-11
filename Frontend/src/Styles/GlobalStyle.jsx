@@ -2,12 +2,18 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
 
+@font-face {
+  font-family: "CustomFont";
+  src: url("./Kajiro.ttf") format("truetype");
+  /* You can specify multiple font formats for better compatibility */
+}
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
-    transition: background-color 0.5s, color 0.5s;
+    transition: background-color 0.4s, color 0.1s;
 }
 
 html{
@@ -15,8 +21,15 @@ html{
 }
 
 body{
-    /* background: ; */
+    background:  ${({ theme }) => theme.color.body.backgroundColor} ;
+    color:  ${({ theme }) => theme.color.body.color} ;
     min-height:100vh;
+    
+}
+
+.MainContainer{
+    width: 100%;
+    min-height: 100vh;
 }
 
 ::-webkit-scrollbar{

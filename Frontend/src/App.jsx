@@ -5,9 +5,11 @@ import Header from "./Components/Header";
 import Home from "./Pages/Home";
 import { useState } from "react";
 import { DarkTheme, LightTheme } from "./Styles/ThemeConfig";
+import Footer from "./Components/Footer";
+import PageNotFound from "./Pages/PageNotFound";
 
 function App() {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
   const Theme = theme === "light" ? LightTheme : DarkTheme;
 
   return (
@@ -20,8 +22,9 @@ function App() {
             <Route exact path="/" element={<Home></Home>}></Route>
             <Route exact path="/login" element={<h1>helloUSER</h1>} />
             <Route exact path="/signin" element={<h1>SignIn</h1>} />
-            <Route exact path="*" element={<h1>PAGE NOT FOUND</h1>} />
+            <Route exact path="*" element={<PageNotFound />} />
           </Routes>
+          <Footer></Footer>
         </BrowserRouter>
       </ThemeProvider>
     </>
