@@ -1,19 +1,22 @@
 export const LightTheme = {
   color: {
     body: {
-      backgroundColor: "rgb(232, 205, 255)",
+      backgroundColor: "rgb(247 248 252)",
       color: "#323232",
     },
     nav: {
-      backgroundColor: "rgba(169, 19, 250, 0.877)",
+      backgroundColor: "linear-gradient(to bottom, #6674cc, #b578ff)",
+      boxshadow: " 0 5px 15px rgba(73, 73, 73, 0.34)",
       color: "#ffffff",
+      toggleBackground: "rgba(255, 255, 255, 0.25)",
+      color2: "#000",
     },
     footer: {
-      backgroundColor: "rgba(169, 19, 250, 0.877)",
+      backgroundColor: "linear-gradient(to bottom, #6674cc, #b578ff)",
       color: "#ffffff",
     },
     primaryButton: {
-      backgroundColor: "#ffb2a8",
+      backgroundColor: " #1028c5",
       color: "#ffffff",
     },
     secondaryButton: {
@@ -46,15 +49,20 @@ export const DarkTheme = {
       color: "#ffffff",
     },
     nav: {
-      backgroundColor: "rgb(80, 21, 207)",
+      // backgroundColor: "rgb(80, 21, 207)",
+      backgroundColor: "linear-gradient(to bottom, #1f36ce, #674492)",
+      boxshadow: "rgb(225 136 255 / 37%) 1px 6px 15px 1px",
       color: "#fff",
+      toggleBackground: "#9700d82c",
+      color2: "#ffff",
     },
     footer: {
-      backgroundColor: "rgb(80, 21, 207)",
+      backgroundColor: "linear-gradient(to bottom, #1f36ce, #674492)",
       color: "#fff",
     },
+
     primaryButton: {
-      backgroundColor: "#f44336",
+      backgroundColor: " #1028c5",
       color: "#ffffff",
     },
     secondaryButton: {

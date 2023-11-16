@@ -32,6 +32,22 @@ body{
     min-height: 100vh;
 }
 
+.buttonPrimary{
+    background:#6674CC;
+    border: .6px solid #fff;
+    border-radius: 10px;
+}
+.buttonSecondary{
+    background: rgb(255 255 255);
+    border: .6px solid #fff;
+    border-radius: 10px;
+}
+
+.Link{
+    list-style: none;
+    text-decoration: none;
+}
+
 ::-webkit-scrollbar{
     width: 10px;
 }

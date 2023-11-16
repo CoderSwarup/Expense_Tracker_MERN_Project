@@ -38,7 +38,7 @@ export default function Footer() {
 
 const Container = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.color.footer.backgroundColor};
+  background: ${({ theme }) => theme.color.footer.backgroundColor};
   color: ${({ theme }) => theme.color.footer.color};
   padding: 20px;
   display: grid;
