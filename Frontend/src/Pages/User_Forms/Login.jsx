@@ -1,39 +1,92 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Loading from "../../Components/Loading";
+import { MdMarkEmailRead } from "react-icons/md";
+import { FaUnlockAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { LoginUser } from "../../Store/Actions/UserActions";
+
 export default function Login() {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const history = useNavigate();
+
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const SubmitForm = async (e) => {
+    e.preventDefault();
+    try {
+      if (!email && !name) {
+        return toast.error("Please Fill All Fields");
+      }
+      console.log("dhd");
+      dispatch(LoginUser({ email, password }));
+    } catch (error) {}
+  };
+
+  // If User Is Regiter then Navigate TO dshboard
+  useEffect(() => {
+    if (isAuthenticated) {
+      history("/dashboard", {
+        state: location.pathname,
+      });
+    }
+  }, [dispatch, isAuthenticated]);
   return (
     <LOGIN>
       {/* Form Container */}
-      <div className="form-container">
-        <h2>LOGIN</h2>
-        <form action="">
-          <div className="email">
-            <span> Email</span>
-            <div className="input">
-              <img src="/assets/icons/sun.png" alt="" />
-              <input type="email" placeholder="Enter Your Email" />
+      {loading === true ? (
+        <Loading></Loading>
+      ) : (
+        <div className="form-container">
+          <h2>LOGIN</h2>
+          <form onSubmit={SubmitForm}>
+            <div className="email">
+              <span> Email</span>
+              <div className="input">
+                <MdMarkEmailRead className="icon" />
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                  type="email"
+                  placeholder="Enter Your Email"
+                  autoComplete="username"
+                />
+              </div>
             </div>
-          </div>
 
-          <div className="password">
-            <span> Password </span>
+            <div className="password">
+              <span> Password </span>
 
-            <div className="input">
-              <img src="/assets/icons/sun.png" alt="" />
-              <input type="password" placeholder="Enter Your Password" />
+              <div className="input">
+                <FaUnlockAlt className="icon" />
+
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                  type="password"
+                  placeholder="Enter Your Password"
+                  autoComplete="current-password"
+                />
+              </div>
             </div>
-          </div>
-          <Link className="p Link" to="/forgot/password">
-            Forgot Password?
+            <Link className="p Link" to="/forgot/password">
+              Forgot Password?
+            </Link>
+
+            <button>LogIn</button>
+          </form>
+          <Link to="/signin" className="Link">
+            Don't Have Accout?
           </Link>
-
-          <button>LogIn</button>
-        </form>
-        <Link to="/signin" className="Link">
-          Don't Have Accout?
-        </Link>
-      </div>
+        </div>
+      )}
     </LOGIN>
   );
 }
@@ -97,11 +150,12 @@ const LOGIN = styled.div`
         border: 1px solid #00000061;
       }
 
-      img {
+      .icon {
         left: 10px;
-
+        font-size: 30px;
         position: absolute;
         width: 20px;
+        color: black;
       }
     }
 
@@ -118,7 +172,7 @@ const LOGIN = styled.div`
       text-transform: uppercase;
       font-weight: bolder;
       color: #fff;
-      cursor: wait;
+      cursor: pointer;
     }
 
     .Link {

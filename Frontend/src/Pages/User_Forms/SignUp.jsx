@@ -7,7 +7,7 @@ export default function SignUp() {
       {/* Form Container */}
       <div className="form-container">
         <h2>Register</h2>
-        <form action="">
+        <form action="" encType="multipart/form-data">
           <div className="name">
             <span>Name </span>
             <div className="input">

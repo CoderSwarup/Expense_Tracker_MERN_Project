@@ -12,6 +12,8 @@ import Login from "./Pages/User_Forms/Login";
 import { useEffect } from "react";
 import Forgot_Password from "./Pages/User_Forms/Forgot_Password";
 import Verify_password from "./Pages/User_Forms/Verify_password";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [theme, setTheme] = useState("dark");
@@ -30,7 +32,7 @@ function App() {
         <BrowserRouter>
           <Header theme={theme} setTheme={setTheme}></Header>
           <Routes>
-            <Route exact path="/" element={<Home></Home>}></Route>
+            <Route exact path="/" element={<Home />}></Route>
             <Route exact path="/login" element={<Login />} />
             <Route exact path="/signin" element={<SignUp />} />
             <Route
@@ -45,6 +47,19 @@ function App() {
             />
             <Route exact path="*" element={<PageNotFound />} />
           </Routes>
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme={theme === "light" ? "dark" : "light"}
+          />
+
           <Footer></Footer>
         </BrowserRouter>
       </ThemeProvider>
