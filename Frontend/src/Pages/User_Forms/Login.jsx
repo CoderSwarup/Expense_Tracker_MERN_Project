@@ -8,13 +8,16 @@ import { MdMarkEmailRead } from "react-icons/md";
 import { FaUnlockAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { LoginUser } from "../../Store/Actions/UserActions";
+import { clearError } from "../../Store/Slices/UserSlice";
 
 export default function Login() {
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useNavigate();
 
-  const { loading, isAuthenticated } = useSelector((state) => state.user);
+  const { loading, isAuthenticated, error } = useSelector(
+    (state) => state.user
+  );
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,19 +28,23 @@ export default function Login() {
       if (!email && !name) {
         return toast.error("Please Fill All Fields");
       }
-      console.log("dhd");
       dispatch(LoginUser({ email, password }));
     } catch (error) {}
   };
 
   // If User Is Regiter then Navigate TO dshboard
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated == true) {
       history("/dashboard", {
         state: location.pathname,
       });
     }
-  }, [dispatch, isAuthenticated]);
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [dispatch, isAuthenticated, error]);
+
   return (
     <LOGIN>
       {/* Form Container */}

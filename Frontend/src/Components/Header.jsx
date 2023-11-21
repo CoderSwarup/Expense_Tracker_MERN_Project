@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { LogoutUser } from "../Store/Actions/UserActions";
 
 export default function Header({ theme, setTheme }) {
-  const [isAuthenticate, setIsAuthenticated] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { loading, isAuthenticated, error, message } = useSelector(
+    (state) => state.user
+  );
+
+  //Theme Chnage Handler
   const ThemeHandler = () => {
     setTheme((prev) => {
       if (prev === "light") {
@@ -19,6 +28,17 @@ export default function Header({ theme, setTheme }) {
 
   const toggleMenuHandler = () => {
     setToggleMenu(!toggleMenu);
+  };
+  // Theme Change Handler End
+
+  //Logout Funcionallity
+
+  const LogoutHandler = (e) => {
+    e.preventDefault();
+    if (isAuthenticated) {
+      dispatch(LogoutUser());
+      navigate("/");
+    }
   };
 
   return (
@@ -38,8 +58,8 @@ export default function Header({ theme, setTheme }) {
           <li>About Us</li>
           <li>Contact Us</li>
         </ul>
-        {isAuthenticate ? (
-          <button>Logout</button>
+        {isAuthenticated ? (
+          <button onClick={LogoutHandler}>Logout</button>
         ) : (
           <>
             <button>
@@ -73,18 +93,25 @@ export default function Header({ theme, setTheme }) {
 
       <div className={`ToggleHeader ${toggleMenu === true ? "" : "new"}`}>
         <li className="navlinks">
-          <Link className="link" to="/login">
-            Login
-          </Link>
-          <Link className="link" to="/DashBoard">
-            DashBoard
-          </Link>
-          <Link className="link" to="/Analysis">
-            Analysis
-          </Link>
-          <Link className="link" to="/Daily">
-            Daily
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link className="link" to="/DashBoard">
+                DashBoard
+              </Link>
+              <Link className="link" to="/Analysis">
+                Analysis
+              </Link>
+              <Link className="link" to="/Daily">
+                Daily
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link className="link" to="/login">
+                Login
+              </Link>
+            </>
+          )}
         </li>
       </div>
     </Mainheader>
@@ -145,6 +172,7 @@ const Mainheader = styled.div`
     font-size: 14px;
     font-weight: 700;
     background: #fff;
+    cursor: pointer;
   }
 
   .right {

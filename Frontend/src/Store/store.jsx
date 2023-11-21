@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { UserReducer } from "./Slices/UserSlice";
+import { ForgotPasswordReducer, UserReducer } from "./Slices/UserSlice";
 
 const store = configureStore({
   reducer: {
     user: UserReducer,
+    forgotpassword: ForgotPasswordReducer,
   },
 });
 
