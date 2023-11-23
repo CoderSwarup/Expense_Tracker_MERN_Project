@@ -3,6 +3,10 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LogoutUser } from "../Store/Actions/UserActions";
+import { AiOutlineLogin } from "react-icons/ai";
+import { FaSignInAlt } from "react-icons/fa";
+import { MdContacts } from "react-icons/md";
+import { IoMdContacts } from "react-icons/io";
 
 export default function Header({ theme, setTheme }) {
   const dispatch = useDispatch();
@@ -54,10 +58,6 @@ export default function Header({ theme, setTheme }) {
         </div>
       </div>
       <div className="right">
-        <ul>
-          <li>About Us</li>
-          <li>Contact Us</li>
-        </ul>
         {isAuthenticated ? (
           <button onClick={LogoutHandler}>Logout</button>
         ) : (
@@ -92,7 +92,7 @@ export default function Header({ theme, setTheme }) {
       </div>
 
       <div className={`ToggleHeader ${toggleMenu === true ? "" : "new"}`}>
-        <li className="navlinks">
+        <div className="navlinks">
           {isAuthenticated ? (
             <>
               <Link className="link" to="/DashBoard">
@@ -108,11 +108,24 @@ export default function Header({ theme, setTheme }) {
           ) : (
             <>
               <Link className="link" to="/login">
+                <AiOutlineLogin />
                 Login
+              </Link>
+              <Link className="link" to="/signin">
+                <FaSignInAlt />
+                Sing In
+              </Link>
+              <Link className="link" to="/aboutus">
+                <IoMdContacts />
+                About Us
+              </Link>
+              <Link className="link" to="/contactus">
+                <MdContacts />
+                Contact Us
               </Link>
             </>
           )}
-        </li>
+        </div>
       </div>
     </Mainheader>
   );
@@ -200,10 +213,12 @@ const Mainheader = styled.div`
 
   .ToggleHeader {
     position: absolute;
+    overflow-y: scroll;
     top: 80px;
     z-index: -1;
     left: 0;
-    width: 100%;
+    width: 270px;
+    height: 80vh;
 
     background: ${({ theme }) => {
       return theme.color.nav.toggleBackground;
@@ -212,21 +227,18 @@ const Mainheader = styled.div`
     backdrop-filter: blur(16px);
     transform: translate(-100%);
     transition: all 0.7s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
     padding: 20px 10px;
 
     .navlinks {
       display: flex;
-      align-items: center;
       flex-direction: column;
-      text-align: center;
       gap: 20px;
-      justify-content: center;
       width: 200px;
-
       .link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
         position: relative;
         padding-bottom: 8px;
         font-size: 2rem;
@@ -249,6 +261,10 @@ const Mainheader = styled.div`
         }
       }
     }
+  }
+
+  .li {
+    color: #fff !important;
   }
   .new {
     transform: translate(0);

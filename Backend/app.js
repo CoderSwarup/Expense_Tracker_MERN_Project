@@ -5,8 +5,13 @@ const cookieParser = require("cookie-parser");
 const CategoryRouter = require("./Routes/CategoryRoute");
 const ExpenseRouter = require("./Routes/ExpenseRoute");
 const app = express();
-
+const bodyParser = require("body-parser");
 //MiddleWare
+
+// Increase the limit to handle larger payloads
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(morgan("dev")); // Use To Check Which Route is Hit And How much time Get the response to the user
@@ -24,7 +29,11 @@ app.use("/api/v1/expense", ExpenseRouter); // Category Routes
 // Error Handler That Stop the Server Creash If the Some Error Create at a time of Any req and res Than it Will Gives The Small Error Message
 app.use(function (error, rq, res, next) {
   console.log("Error is :" + error);
-  res.send(`<h1>Somthing Went Wrong Please Try After Some Time</h1>`);
+  res.status(300).send({
+    success: false,
+    error:
+      "Please Try To Contact Us Somthing Went Wrong Please Try After Some Time",
+  });
 });
 
 module.exports = app;

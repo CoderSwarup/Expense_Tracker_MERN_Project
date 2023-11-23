@@ -4,6 +4,23 @@ import axios from "axios";
 //Header Config
 const config = { headers: { "Content-Type": "application/json" } };
 
+export const RegisterUser = createAsyncThunk(
+  "user/register",
+  async (userData) => {
+    try {
+      const { data } = await axios.post(
+        "/api/v1/auth/register",
+        userData,
+        config
+      );
+      console.log("done");
+      return data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 // Login User Action
 export const LoginUser = createAsyncThunk(
   "user/login",
@@ -55,6 +72,7 @@ export const ForgotPassword = createAsyncThunk(
   }
 );
 
+//Get User Profile
 export const GetUser = createAsyncThunk("user/profile", async () => {
   try {
     const { data } = await axios.get("/api/v1/auth/myprofile", config);

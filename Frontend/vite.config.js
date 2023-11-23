@@ -7,10 +7,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
+      // Authentication
+      "/api/v1/auth/register": BACKENDURL,
       "/api/v1/auth/login": BACKENDURL,
       "/api/v1/auth/logout": BACKENDURL,
       "/api/v1/auth/forgotpassword": BACKENDURL,
       "/api/v1/auth/myprofile": BACKENDURL,
+      "/api/v1/auth/verify/user": BACKENDURL,
     },
   },
 });

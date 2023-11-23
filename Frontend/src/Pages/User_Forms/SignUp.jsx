@@ -1,33 +1,122 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { FaRegUserCircle, FaUnlock } from "react-icons/fa";
+import { MdMarkEmailRead } from "react-icons/md";
+import { IoCall } from "react-icons/io5";
+import { FaLock } from "react-icons/fa6";
+import { toast } from "react-toastify";
+import { RegisterUser } from "../../Store/Actions/UserActions";
+import { clearError, clearMessage } from "../../Store/Slices/UserSlice";
+import Button from "../../Components/Button";
+
 export default function SignUp() {
+  const dispatch = useDispatch();
+  const history = useNavigate();
+  const [email, setemail] = useState("");
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState(undefined);
+  const [password, setPassword] = useState(undefined);
+  const [cpassword, setCPassword] = useState(undefined);
+  const [avatar, setAvatar] = useState("/Profile.png");
+  const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
+
+  const { loading, isAuthenticated, error, message } = useSelector(
+    (state) => state.user
+  );
+
+  //Set The image
+  const registerDataChange = (e) => {
+    if (e.target.name === "avatar") {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setAvatarPreview(reader.result);
+          setAvatar(reader.result);
+        }
+      };
+
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  //Submit the Form
+  const SubmitRegisterForm = (e) => {
+    e.preventDefault();
+    // if ((!email || !name, !mobile, !password, !cpassword)) {
+    //   return toast.info("Please Fill All Fields");
+    // }
+    let formdata = new FormData();
+    formdata.append("name", name);
+    formdata.append("email", email);
+    formdata.append("mobile", mobile);
+    formdata.append("password", password);
+    formdata.append("cpassword", cpassword);
+    formdata.append("avatar", avatar);
+
+    dispatch(RegisterUser(formdata));
+  };
+
+  useEffect(() => {
+    if (isAuthenticated == true) {
+      history("/dashboard", {
+        state: location.pathname,
+      });
+    }
+    if (message) {
+      toast.success(message);
+      dispatch(clearMessage());
+    }
+
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [dispatch, message, isAuthenticated, error]);
   return (
     <Signup>
       {/* Form Container */}
       <div className="form-container">
         <h2>Register</h2>
-        <form action="" encType="multipart/form-data">
+        <form onSubmit={SubmitRegisterForm} encType="multipart/form-data">
           <div className="name">
             <span>Name </span>
             <div className="input">
-              <img src="/assets/icons/sun.png" alt="" />
-              <input type="text" placeholder="Enter Your Name" />
+              <FaRegUserCircle className="icon" />
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                placeholder="Enter Your Name"
+              />
             </div>
           </div>
           <div className="email">
             <span> Email</span>
             <div className="input">
-              <img src="/assets/icons/sun.png" alt="" />
-              <input type="email" placeholder="Enter Your Email" />
+              <MdMarkEmailRead className="icon" />
+              <input
+                value={email}
+                onChange={(e) => setemail(e.target.value)}
+                type="email"
+                placeholder="Enter Your Email"
+              />
             </div>
           </div>
 
           <div className="mobile">
             <span> Mobile </span>
             <div className="input">
-              <img src="/assets/icons/sun.png" alt="" />
-              <input type="email" placeholder="Enter Your Email" />
+              <IoCall className="icon" />
+              <input
+                value={mobile}
+                onChange={(e) => setMobile(e.target.value)}
+                type="text"
+                pattern="[0-9]{10}"
+                placeholder="Enter Your Email"
+              />
             </div>
           </div>
 
@@ -35,24 +124,43 @@ export default function SignUp() {
             <span> Password </span>
 
             <div className="input">
-              <img src="/assets/icons/sun.png" alt="" />
-              <input type="password" placeholder="Enter Your Password" />
+              <FaUnlock className="icon" />{" "}
+              <input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder="Enter Your Password"
+              />
             </div>
           </div>
           <div className="cpassword">
             <span> confirm Password </span>
 
             <div className="input">
-              <img src="/assets/icons/sun.png" alt="" />
-              <input type="password" placeholder="Enter Password Again" />
+              <FaLock className="icon" />
+              <input
+                value={cpassword}
+                onChange={(e) => setCPassword(e.target.value)}
+                type="password"
+                placeholder="Enter Password Again"
+              />
             </div>
           </div>
           <div className="input">
-            <img src="/assets/icons/sun.png" alt="" />
-            <input type="file" name="picture" id="" />
+            <img
+              className="preview-img"
+              src={avatarPreview}
+              alt="Avatar Preview"
+            />
+            <input
+              type="file"
+              name="avatar"
+              accept="image/*"
+              onChange={registerDataChange}
+            />
           </div>
 
-          <button>SignIn</button>
+          <Button text="SIGN IN" />
         </form>
         <Link to="/login" className="Link">
           Alredy Have Accout?
@@ -115,40 +223,34 @@ const Signup = styled.div`
       }
 
       input::file-selector-button {
-        cursor: wait;
-        width: 100%;
+        cursor: pointer;
+        width: 104%;
         z-index: 2;
         border: none;
         margin: 0%;
-        font: 400 0.8vmax cursive;
+        font: 800 0.8vmax cursive;
+        font-size: 12px;
         transition: all 0.5s;
-        padding: 0 1vmax;
+        padding: 0.1vmax;
         color: rgba(0, 0, 0, 0.623);
         background-color: rgb(255, 255, 255);
       }
 
-      img {
+      .icon {
         left: 10px;
-
+        font-size: 30px;
         position: absolute;
         width: 20px;
+        color: black;
       }
-    }
 
-    button {
-      margin: 20px 0;
-      width: 100%;
-      padding: 7px 14px;
-      border: none;
-      border-radius: 50px;
-      background: ${({ theme }) => {
-        return theme.color.primaryButton.backgroundColor;
-      }};
-      font-size: 1.7rem;
-      text-transform: uppercase;
-      font-weight: bolder;
-      color: #fff;
-      cursor: wait;
+      .preview-img {
+        width: 50px;
+        border: 2px solid #dadada;
+        padding: 2px;
+        border-radius: 50%;
+        margin-right: 5px;
+      }
     }
 
     .Link {

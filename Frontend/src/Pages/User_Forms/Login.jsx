@@ -9,6 +9,7 @@ import { FaUnlockAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { LoginUser } from "../../Store/Actions/UserActions";
 import { clearError } from "../../Store/Slices/UserSlice";
+import Button from "../../Components/Button";
 
 export default function Login() {
   const dispatch = useDispatch();
@@ -87,7 +88,7 @@ export default function Login() {
               Forgot Password?
             </Link>
 
-            <button>LogIn</button>
+            <Button text="LOGIN" />
           </form>
           <Link to="/signin" className="Link">
             Don't Have Accout?
@@ -164,22 +165,6 @@ const LOGIN = styled.div`
         width: 20px;
         color: black;
       }
-    }
-
-    button {
-      margin: 20px 0;
-      width: 100%;
-      padding: 7px 14px;
-      border: none;
-      border-radius: 50px;
-      background: ${({ theme }) => {
-        return theme.color.primaryButton.backgroundColor;
-      }};
-      font-size: 1.7rem;
-      text-transform: uppercase;
-      font-weight: bolder;
-      color: #fff;
-      cursor: pointer;
     }
 
     .Link {

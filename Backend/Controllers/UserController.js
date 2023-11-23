@@ -9,10 +9,9 @@ const cloudinary = require("cloudinary");
 //Register User
 exports.RegisterUserController = async (req, res) => {
   try {
-    const { name, email, password, cpassword } = req;
+    const { name, email, mobile, password, cpassword, avatar } = req.body;
 
-    console.log(req.body.avatar);
-    if ((!name, !email, !password, !cpassword)) {
+    if ((!name, !email, !mobile, !password, !cpassword)) {
       return res
         .status(401)
         .send({ succcess: false, message: "Please fill all fields" });
@@ -24,32 +23,41 @@ exports.RegisterUserController = async (req, res) => {
         .send({ succcess: false, message: "Password Must Be Match!" });
     }
 
-    // const FindUserAlredyExists = await userModel.findOne({
-    //   email,
-    // });
+    const FindUserAlredyExists = await userModel.findOne({
+      email,
+    });
 
-    // if (FindUserAlredyExists) {
-    //   return res.status(300).send({
-    //     succcess: false,
-    //     message: "User Is Alredy Exists",
-    //   });
-    // }
+    if (FindUserAlredyExists) {
+      return res.status(300).send({
+        succcess: false,
+        message: "User Is Alredy Exists",
+      });
+    }
 
-    // const hashPassword = await bcrypt.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, 10);
 
-    // const user = await userModel({
-    //   name,
-    //   email,
-    //   password: hashPassword,
-    //   avatar: {
-    //     public_id: "33838",
-    //     url: "sjssjsj",
-    //   },
-    // });
+    let myCloud;
 
-    // const VerifyToken = user.genrateVerificationToken();
-    // user.verifyToken = VerifyToken.verifyToken;
-    // user.verifyTokenExpire = VerifyToken.verifyTokenExpire;
+    if (avatar !== "/Profile.png") {
+      myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+        folder: "ExpenseTracker",
+        width: 150,
+        crop: "scale",
+      });
+    }
+    const user = await userModel({
+      name,
+      email,
+      password: hashPassword,
+      avatar: {
+        public_id: myCloud?.public_id || Math.floor(Math.random() * 26633636),
+        url: myCloud?.secure_url || "/Profile.png",
+      },
+    });
+
+    const VerifyToken = user.genrateVerificationToken();
+    user.verifyToken = VerifyToken.verifyToken;
+    user.verifyTokenExpire = VerifyToken.verifyTokenExpire;
 
     // const Message = `
     // <!DOCTYPE html>
@@ -90,7 +98,7 @@ exports.RegisterUserController = async (req, res) => {
     //   });
     // }
 
-    // await user.save();
+    await user.save();
 
     return res.status(200).send({
       succcess: true,
@@ -133,9 +141,9 @@ exports.VerifyUserController = async (req, res) => {
     user.verifyTokenExpire = undefined;
 
     await user.save();
-
+    console.log("done");
     return res.status(200).send({
-      succcess: true,
+      success: true,
       message: "Your Validate SuccessFully Congragulations!!!",
     });
   } catch (error) {

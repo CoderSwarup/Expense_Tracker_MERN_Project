@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Components/Loading";
 import { GetUser } from "./Store/Actions/UserActions";
 import { clearError, clearMessage } from "./Store/Slices/UserSlice";
+import VerifyUser from "./Components/VerifyUser";
+import About from "./Pages/Hero/About";
 
 function App() {
   const Dispatch = useDispatch();
@@ -46,11 +48,16 @@ function App() {
           {loading && <Loading></Loading>}
           <Header theme={theme} setTheme={setTheme}></Header>
           <Routes>
+            {/* Main Page */}
             <Route exact path="/" element={<Home />}></Route>
 
+            {/* Login Page */}
             <Route exact path="/login" element={<Login />} />
+
+            {/* Register Page */}
             <Route exact path="/signin" element={<SignUp />} />
 
+            {/* Forgot Password Page */}
             <Route
               exact
               path="/forgot/password"
@@ -62,6 +69,10 @@ function App() {
               path="/reset/password-verify/:token"
               element={<Verify_password />}
             />
+
+            <Route exact path="/verify/user/:token" element={<VerifyUser />} />
+
+            <Route exact path="/aboutus" element={<About />} />
             <Route exact path="*" element={<PageNotFound />} />
           </Routes>
 

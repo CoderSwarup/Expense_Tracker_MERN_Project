@@ -4,6 +4,7 @@ import {
   GetUser,
   LoginUser,
   LogoutUser,
+  RegisterUser,
 } from "../Actions/UserActions";
 
 // Login Register And Logout
@@ -29,6 +30,22 @@ const UserSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Handle both LoginUser and RegisterUser actions
+
+    //Register User
+    builder
+      .addCase(RegisterUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(RegisterUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.message = action.payload.message;
+      })
+      .addCase(RegisterUser.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.error = action.error.message;
+      });
 
     // // login
     builder
