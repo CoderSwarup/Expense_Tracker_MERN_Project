@@ -63,7 +63,11 @@ body{
     border: 5px solid transparent;
 }
 
-
+.d-flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 `;
 
 export default GlobalStyle;

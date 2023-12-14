@@ -23,8 +23,9 @@ const UserSchema = new mongoose.Schema(
       // required: true,
       select: false,
     },
-    mobile: {
-      type: Number,
+    gender: {
+      type: String,
+      enum: ["Male", "FeMale", "Other"],
       // required: true,
     },
     avatar: {

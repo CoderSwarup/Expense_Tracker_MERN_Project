@@ -20,7 +20,14 @@ import { GetUser } from "./Store/Actions/UserActions";
 import { clearError, clearMessage } from "./Store/Slices/UserSlice";
 import VerifyUser from "./Components/VerifyUser";
 import About from "./Pages/Hero/About";
+import Contact from "./Components/Contact";
+import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
+import DashBoard from "./Pages/DashBoard";
+import Profile from "./Pages/Profile";
 
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 function App() {
   const Dispatch = useDispatch();
   const { loading, isAuthenticated } = useSelector((state) => state.user);
@@ -49,7 +56,31 @@ function App() {
           <Header theme={theme} setTheme={setTheme}></Header>
           <Routes>
             {/* Main Page */}
-            <Route exact path="/" element={<Home />}></Route>
+            {!isAuthenticated ? (
+              <>
+                <Route exact path="/" element={<Home />}></Route>
+                {/* Forgot Password Page */}
+                <Route
+                  exact
+                  path="/forgot/password"
+                  element={<Forgot_Password />}
+                />
+
+                <Route
+                  exact
+                  path="/reset/password-verify/:token"
+                  element={<Verify_password />}
+                />
+
+                <Route
+                  exact
+                  path="/verify/user/:token"
+                  element={<VerifyUser />}
+                />
+              </>
+            ) : (
+              <Route exact path="/" element={<DashBoard />} />
+            )}
 
             {/* Login Page */}
             <Route exact path="/login" element={<Login />} />
@@ -57,25 +88,18 @@ function App() {
             {/* Register Page */}
             <Route exact path="/signin" element={<SignUp />} />
 
-            {/* Forgot Password Page */}
+            {/* Protected Routes */}
             <Route
-              exact
-              path="/forgot/password"
-              element={<Forgot_Password />}
-            />
+              element={<ProtectedRoute isAuthenticated={isAuthenticated} />}
+            >
+              <Route exact path="/profile" element={<Profile />} />
+            </Route>
 
-            <Route
-              exact
-              path="/reset/password-verify/:token"
-              element={<Verify_password />}
-            />
-
-            <Route exact path="/verify/user/:token" element={<VerifyUser />} />
-
+            {/* Public Routes */}
             <Route exact path="/aboutus" element={<About />} />
+            <Route exact path="/contact" element={<Contact />} />
             <Route exact path="*" element={<PageNotFound />} />
           </Routes>
-
           {/* React toastify */}
           <ToastContainer
             position="top-right"
@@ -91,7 +115,7 @@ function App() {
           />
 
           {/* Footer */}
-          <Footer></Footer>
+          {!isAuthenticated && <Footer></Footer>}
         </BrowserRouter>
       </ThemeProvider>
     </>

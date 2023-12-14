@@ -6,7 +6,7 @@ const TokenSender = (user, status, msg, res) => {
   const refreshtoken = user.generateRefreshToken();
 
   const accessTokenOptions = {
-    expires: new Date(Date.now() + 15 * 60 * 1000), // Access token expiration: 15 minutes
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // Access token expiration: 1 day
     httpOnly: true,
   };
 

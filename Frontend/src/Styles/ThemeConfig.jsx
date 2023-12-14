@@ -23,9 +23,8 @@ export const LightTheme = {
       backgroundColor: "#ebebeb",
       color: "#323232",
     },
-    success: {
-      color: "#77d2c8",
-    },
+    success: "#77d2c8",
+    textColor: "#000",
     danger: {
       color: "#f75252",
     },
@@ -69,9 +68,8 @@ export const DarkTheme = {
       backgroundColor: "#1d1d1d",
       color: "#ffffff",
     },
-    success: {
-      color: "#20bd5f",
-    },
+    success: "#20bd5f",
+    textColor: "#ffffff",
     danger: {
       color: "#e91e63",
     },

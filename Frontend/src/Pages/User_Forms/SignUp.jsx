@@ -21,6 +21,7 @@ export default function SignUp() {
   const [cpassword, setCPassword] = useState(undefined);
   const [avatar, setAvatar] = useState("/Profile.png");
   const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
+  const [gender, setGender] = useState("");
 
   const { loading, isAuthenticated, error, message } = useSelector(
     (state) => state.user
@@ -45,23 +46,28 @@ export default function SignUp() {
   //Submit the Form
   const SubmitRegisterForm = (e) => {
     e.preventDefault();
-    // if ((!email || !name, !mobile, !password, !cpassword)) {
-    //   return toast.info("Please Fill All Fields");
-    // }
+
+    if ((!email || !name, !mobile, !password, !cpassword, !gender)) {
+      return toast.info("Please Fill All Fields");
+    }
+
+    if (name.length < 4) return toast.info("Name Must be 4 letters");
     let formdata = new FormData();
     formdata.append("name", name);
     formdata.append("email", email);
     formdata.append("mobile", mobile);
     formdata.append("password", password);
+    formdata.append("gender", gender);
     formdata.append("cpassword", cpassword);
     formdata.append("avatar", avatar);
 
     dispatch(RegisterUser(formdata));
+    formdata.reset();
   };
 
   useEffect(() => {
     if (isAuthenticated == true) {
-      history("/dashboard", {
+      history("/", {
         state: location.pathname,
       });
     }
@@ -75,6 +81,7 @@ export default function SignUp() {
       dispatch(clearError());
     }
   }, [dispatch, message, isAuthenticated, error]);
+
   return (
     <Signup>
       {/* Form Container */}
@@ -116,7 +123,32 @@ export default function SignUp() {
                 type="text"
                 pattern="[0-9]{10}"
                 placeholder="Enter Your Email"
+                autoComplete="mobile"
               />
+            </div>
+          </div>
+
+          <div className="gender">
+            <span> Gender </span>
+            <div className=" gender-input">
+              <label htmlFor="male">
+                <input
+                  onChange={() => setGender("Male")}
+                  id="male"
+                  type="radio"
+                  name="gender"
+                />
+                <span>Male</span>
+              </label>
+              <label htmlFor="female">
+                <input
+                  onChange={() => setGender("Female")}
+                  id="female"
+                  type="radio"
+                  name="gender"
+                />
+                <span>Female</span>
+              </label>
             </div>
           </div>
 
@@ -130,6 +162,7 @@ export default function SignUp() {
                 onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 placeholder="Enter Your Password"
+                autoComplete="new-password"
               />
             </div>
           </div>
@@ -143,6 +176,7 @@ export default function SignUp() {
                 onChange={(e) => setCPassword(e.target.value)}
                 type="password"
                 placeholder="Enter Password Again"
+                autoComplete="new-c-password"
               />
             </div>
           </div>
@@ -257,6 +291,15 @@ const Signup = styled.div`
       font-size: 17px;
       color: blue;
       align-self: flex-end;
+    }
+  }
+  .gender-input {
+    display: flex;
+    margin: 6px 0;
+    gap: 20px;
+
+    input {
+      margin-right: 5px;
     }
   }
 `;

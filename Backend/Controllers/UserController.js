@@ -9,9 +9,10 @@ const cloudinary = require("cloudinary");
 //Register User
 exports.RegisterUserController = async (req, res) => {
   try {
-    const { name, email, mobile, password, cpassword, avatar } = req.body;
+    const { name, email, mobile, password, cpassword, avatar, gender } =
+      req.body;
 
-    if ((!name, !email, !mobile, !password, !cpassword)) {
+    if (((!name, !email, !mobile, !password, !cpassword), !gender)) {
       return res
         .status(401)
         .send({ succcess: false, message: "Please fill all fields" });
@@ -49,6 +50,7 @@ exports.RegisterUserController = async (req, res) => {
       name,
       email,
       password: hashPassword,
+      gender,
       avatar: {
         public_id: myCloud?.public_id || Math.floor(Math.random() * 26633636),
         url: myCloud?.secure_url || "/Profile.png",
@@ -59,44 +61,44 @@ exports.RegisterUserController = async (req, res) => {
     user.verifyToken = VerifyToken.verifyToken;
     user.verifyTokenExpire = VerifyToken.verifyTokenExpire;
 
-    // const Message = `
-    // <!DOCTYPE html>
-    // <html>
-    // <head>
-    //   <meta charset="utf-8">
-    //   <title>Verify Your Email Address</title>
-    // </head>
-    // <body>
+    const Message = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <title>Verify Your Email Address</title>
+    </head>
+    <body>
 
-    //         <div style="text-align: left;">
-    //           <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Welcome to the Expense Tracker App!</h1>
-    //           <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">We're excited to have you as a part of our community. To start managing your expenses, please verify your email address by clicking the button below:</p>
-    //           <a href="${process.env.FRONTEND_URL}/verify/user/${VerifyToken.verifyToken}" style="display: inline-block; padding: 12px 24px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 4px;">Verify Your Email</a>
-    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">If the button above doesn't work, you can also copy and paste the following link into your web browser:</p>
-    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 10px;">${process.env.FRONTEND_URL}/verify/user/${VerifyToken.verifyToken}</p>
-    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Please note that this verification link is valid for the next 15 minutes. After that, you may need to request a new verification link.</p>
-    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">If you didn't create an account with us, please ignore this email.</p>
-    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Thank you for choosing the Expense Tracker App! If you have any questions or need assistance, please don't hesitate to reach out to our support team at [SUPPORT_EMAIL_ADDRESS].</p>
-    //           <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Sincerely,<br>Swarup Bhise<br>Expense Tracker</p>
-    //        </div>
-    // </body>
-    // </html>
-    // `;
+            <div style="text-align: left;">
+              <h1 style="font-size: 24px; font-weight: bold; margin-bottom: 10px;">Welcome to the Expense Tracker App!</h1>
+              <p style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">We're excited to have you as a part of our community. To start managing your expenses, please verify your email address by clicking the button below:</p>
+              <a href="${process.env.FRONTEND_URL}/verify/user/${VerifyToken.verifyToken}" style="display: inline-block; padding: 12px 24px; background-color: #007BFF; color: #ffffff; text-decoration: none; border-radius: 4px;">Verify Your Email</a>
+              <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">If the button above doesn't work, you can also copy and paste the following link into your web browser:</p>
+              <p style="font-size: 16px; line-height: 1.5; margin-top: 10px;">${process.env.FRONTEND_URL}/verify/user/${VerifyToken.verifyToken}</p>
+              <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Please note that this verification link is valid for the next 15 minutes. After that, you may need to request a new verification link.</p>
+              <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">If you didn't create an account with us, please ignore this email.</p>
+              <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Thank you for choosing the Expense Tracker App! If you have any questions or need assistance, please don't hesitate to reach out to our support team at [SUPPORT_EMAIL_ADDRESS].</p>
+              <p style="font-size: 16px; line-height: 1.5; margin-top: 20px;">Sincerely,<br>Swarup Bhise<br>Expense Tracker</p>
+           </div>
+    </body>
+    </html>
+    `;
 
-    // let EmailSend = await SendEmail(
-    //   {
-    //     email: user.email,
-    //     subject: `Expense Tracker App Verification`,
-    //     message: Message,
-    //   },
-    //   res
-    // );
-    // if (!EmailSend) {
-    //   return res.status(500).send({
-    //     success: false,
-    //     message: "Please Try Again error in sending verification mail!",
-    //   });
-    // }
+    let EmailSend = await SendEmail(
+      {
+        email: user.email,
+        subject: `Expense Tracker App Verification`,
+        message: Message,
+      },
+      res
+    );
+    if (!EmailSend) {
+      return res.status(500).send({
+        success: false,
+        message: "Please Try Again error in sending verification mail!",
+      });
+    }
 
     await user.save();
 

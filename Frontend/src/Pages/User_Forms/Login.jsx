@@ -36,7 +36,7 @@ export default function Login() {
   // If User Is Regiter then Navigate TO dshboard
   useEffect(() => {
     if (isAuthenticated == true) {
-      history("/dashboard", {
+      history("/", {
         state: location.pathname,
       });
     }

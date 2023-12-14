@@ -7,12 +7,15 @@ import { AiOutlineLogin } from "react-icons/ai";
 import { FaSignInAlt } from "react-icons/fa";
 import { MdContacts } from "react-icons/md";
 import { IoMdContacts } from "react-icons/io";
+import { CgProfile } from "react-icons/cg";
+import { RxDashboard } from "react-icons/rx";
+import { IoMdAnalytics } from "react-icons/io";
 
 export default function Header({ theme, setTheme }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, isAuthenticated, error, message } = useSelector(
+  const { loading, isAuthenticated, error, message, user } = useSelector(
     (state) => state.user
   );
 
@@ -59,7 +62,26 @@ export default function Header({ theme, setTheme }) {
       </div>
       <div className="right">
         {isAuthenticated ? (
-          <button onClick={LogoutHandler}>Logout</button>
+          <>
+            <UserProfile className="userProfile">
+              <img
+                src={
+                  user?.user.avatar.url === "/Profile.png"
+                    ? "/Profile.png"
+                    : user?.user.avatar.url
+                }
+                alt="profile"
+              />
+
+              <div className="profile_manager">
+                <h3> Hi , {user?.user.name}</h3>
+                <Link className="Link" to="/profile">
+                  <CgProfile /> Profile
+                </Link>
+                <button onClick={LogoutHandler}>Logout</button>
+              </div>
+            </UserProfile>
+          </>
         ) : (
           <>
             <button>
@@ -95,10 +117,12 @@ export default function Header({ theme, setTheme }) {
         <div className="navlinks">
           {isAuthenticated ? (
             <>
-              <Link className="link" to="/DashBoard">
+              <Link className="link" to="/">
+                <RxDashboard />
                 DashBoard
               </Link>
               <Link className="link" to="/Analysis">
+                <IoMdAnalytics />
                 Analysis
               </Link>
               <Link className="link" to="/Daily">
@@ -115,16 +139,16 @@ export default function Header({ theme, setTheme }) {
                 <FaSignInAlt />
                 Sing In
               </Link>
-              <Link className="link" to="/aboutus">
-                <IoMdContacts />
-                About Us
-              </Link>
-              <Link className="link" to="/contactus">
-                <MdContacts />
-                Contact Us
-              </Link>
             </>
           )}
+          <Link className="link" to="/aboutus">
+            <IoMdContacts />
+            About Us
+          </Link>
+          <Link className="link" to="/contact">
+            <MdContacts />
+            Contact Us
+          </Link>
         </div>
       </div>
     </Mainheader>
@@ -214,11 +238,11 @@ const Mainheader = styled.div`
   .ToggleHeader {
     position: absolute;
     overflow-y: scroll;
-    top: 80px;
+    top: 100%;
     z-index: -1;
     left: 0;
     width: 270px;
-    height: 80vh;
+    height: 90vh;
 
     background: ${({ theme }) => {
       return theme.color.nav.toggleBackground;
@@ -268,5 +292,50 @@ const Mainheader = styled.div`
   }
   .new {
     transform: translate(0);
+  }
+`;
+
+const UserProfile = styled.div`
+  position: relative;
+  color: #000 !important;
+  font-size: 12px !important;
+
+  h3 {
+    padding-left: 7px;
+    margin: 10px 0;
+  }
+  img {
+    width: 60px !important;
+    height: 60px !important;
+    object-fit: cover;
+    cursor: pointer;
+  }
+
+  &:hover .profile_manager {
+    display: block;
+  }
+
+  .profile_manager {
+    width: 150px;
+    border: 1px solid #000;
+    border-radius: 10px;
+    padding: 2px 4px;
+    background: #ffffff75;
+    position: absolute;
+    bottom: -100px;
+    right: 0;
+    backdrop-filter: blur(10px);
+    display: none;
+  }
+
+  .Link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    margin: 10px 0;
+    padding-left: 7px;
+    font-weight: 600;
+    color: #000;
   }
 `;
