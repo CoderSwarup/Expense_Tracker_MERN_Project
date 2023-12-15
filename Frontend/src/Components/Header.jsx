@@ -10,7 +10,7 @@ import { IoMdContacts } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { RxDashboard } from "react-icons/rx";
 import { IoMdAnalytics } from "react-icons/io";
-
+import { MdCategory } from "react-icons/md";
 export default function Header({ theme, setTheme }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -121,7 +121,11 @@ export default function Header({ theme, setTheme }) {
                 <RxDashboard />
                 DashBoard
               </Link>
-              <Link className="link" to="/Analysis">
+              <Link className="link" to="/category">
+                <MdCategory />
+                Category
+              </Link>
+              <Link className="link" to="/analysis">
                 <IoMdAnalytics />
                 Analysis
               </Link>

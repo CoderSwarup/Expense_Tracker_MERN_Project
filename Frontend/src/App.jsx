@@ -26,6 +26,7 @@ import DashBoard from "./Pages/DashBoard";
 import Profile from "./Pages/Profile";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import CategoryDashBoard from "./Components/Category/CategoryDashBoard";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 function App() {
@@ -93,6 +94,7 @@ function App() {
               element={<ProtectedRoute isAuthenticated={isAuthenticated} />}
             >
               <Route exact path="/profile" element={<Profile />} />
+              <Route exact path="/category" element={<CategoryDashBoard />} />
             </Route>
 
             {/* Public Routes */}
