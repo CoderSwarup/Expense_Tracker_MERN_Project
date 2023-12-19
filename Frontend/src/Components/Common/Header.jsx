@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { LogoutUser } from "../Store/Actions/UserActions";
+import { LogoutUser } from "../../Store/Actions/UserActions";
 import { AiOutlineLogin } from "react-icons/ai";
 import { FaSignInAlt } from "react-icons/fa";
 import { MdContacts } from "react-icons/md";
@@ -11,6 +11,8 @@ import { CgProfile } from "react-icons/cg";
 import { RxDashboard } from "react-icons/rx";
 import { IoMdAnalytics } from "react-icons/io";
 import { MdCategory } from "react-icons/md";
+import { TbCoinRupee } from "react-icons/tb";
+
 export default function Header({ theme, setTheme }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -129,7 +131,8 @@ export default function Header({ theme, setTheme }) {
                 <IoMdAnalytics />
                 Analysis
               </Link>
-              <Link className="link" to="/Daily">
+              <Link className="link" to="/dailyexpense">
+                <TbCoinRupee />
                 Daily
               </Link>
             </>

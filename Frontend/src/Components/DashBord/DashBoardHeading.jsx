@@ -15,6 +15,9 @@ export default function DashBoardHeading() {
 }
 
 const Wrapper = styled.div`
+  color: ${({ theme }) => {
+    return theme.color.textColor;
+  }};
   .heading-name {
     width: 98%;
     margin: 0 auto;

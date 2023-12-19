@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { FaRupeeSign } from "react-icons/fa";
 import DoughnutChart from "../Components/Charts/DoughnutChart";
 import { FcDoughnutChart } from "react-icons/fc";
-import ExpenseCard from "../Components/ExpenseCard";
+import ExpenseCard from "../Components/CardComponent/ExpenseCard";
 
 import CategoryDashBoard from "../Components/Category/CategoryDashBoard";
 import DashBoardHeading from "../Components/DashBord/DashBoardHeading";
@@ -22,7 +22,7 @@ export default function DashBoard() {
 
         {/* Expenses */}
         <Expenses>
-          <h1>Recent Expenses</h1>
+          <h1>New Payments</h1>
           <div className="expense-container">
             <ExpenseCard />
           </div>

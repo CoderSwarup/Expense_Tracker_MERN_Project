@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { MdVerified } from "react-icons/md";
-import Button from "./Button";
+import Button from "../StyleComponent/Button";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";

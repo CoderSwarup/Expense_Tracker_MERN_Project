@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { HiDotsVertical } from "react-icons/hi";
 import { MdDriveFileRenameOutline, MdOutlineAnalytics } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import CategoryCard from "../CategoryCard";
+import CategoryCard from "../CardComponent/CategoryCard";
 import DashBoardHeading from "../DashBord/DashBoardHeading";
 
 export default function CategoryDashBoard({ device = "desktop" }) {
@@ -164,7 +164,7 @@ const CategoryWrapper = styled.div`
 
     /* .income-category {
     margin: 10px 0;
-  } */
+    } */
   }
 
   /* Desktop Container */
@@ -296,5 +296,12 @@ const CategoryWrapper = styled.div`
     &:hover .menu-details {
       display: block;
     }
+  }
+
+  .create-Category-Form {
+    padding: 5px 10px;
+    border-radius: 25px;
+    /* background: linear-gradient(to left, #0000ffa3, red); */
+    /* box-shadow: 4px 10px 130px #fff; */
   }
 `;

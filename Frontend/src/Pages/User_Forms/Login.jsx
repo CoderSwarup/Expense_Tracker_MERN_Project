@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "../../Components/Loading";
+import Loading from "../../Components/Common/Loading";
 import { MdMarkEmailRead } from "react-icons/md";
 import { FaUnlockAlt } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { LoginUser } from "../../Store/Actions/UserActions";
 import { clearError } from "../../Store/Slices/UserSlice";
-import Button from "../../Components/Button";
+import Button from "../../Components/StyleComponent/Button";
 
 export default function Login() {
   const dispatch = useDispatch();

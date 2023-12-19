@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "./Button";
+import Button from "../StyleComponent/Button";
 import { MdOutlineMail } from "react-icons/md";
 import { FaLocationArrow } from "react-icons/fa";
 

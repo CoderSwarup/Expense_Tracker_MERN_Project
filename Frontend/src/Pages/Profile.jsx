@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import Button from "../Components/Button";
+import Button from "../Components/StyleComponent/Button";
 import { CiUser } from "react-icons/ci";
 import { CgCalendarDates } from "react-icons/cg";
 import { FaMobileAlt } from "react-icons/fa";

@@ -9,7 +9,7 @@ import { FaLock } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { RegisterUser } from "../../Store/Actions/UserActions";
 import { clearError, clearMessage } from "../../Store/Slices/UserSlice";
-import Button from "../../Components/Button";
+import Button from "../../Components/StyleComponent/Button";
 
 export default function SignUp() {
   const dispatch = useDispatch();

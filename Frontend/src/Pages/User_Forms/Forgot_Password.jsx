@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 import { ForgotPassword } from "../../Store/Actions/UserActions";
-import Loading from "../../Components/Loading";
+import Loading from "../../Components/Common/Loading";
 import {
   forgotclearError,
   forgotclearMessage,

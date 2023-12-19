@@ -41,6 +41,7 @@ export default function ExpenseCard() {
 }
 
 const Wrapper = styled.div`
+  color: #fff !important;
   .expense {
     width: 100%;
     margin: 20px 0;

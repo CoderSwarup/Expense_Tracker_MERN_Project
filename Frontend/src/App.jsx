@@ -1,11 +1,11 @@
 import { ThemeProvider } from "styled-components";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyle from "./Styles/GlobalStyle";
-import Header from "./Components/Header";
+import Header from "./Components/Common/Header";
 import Home from "./Pages/Hero/Home";
 import { useState } from "react";
 import { DarkTheme, LightTheme } from "./Styles/ThemeConfig";
-import Footer from "./Components/Footer";
+import Footer from "./Components/Common/Footer";
 import PageNotFound from "./Pages/Hero/PageNotFound";
 import SignUp from "./Pages/User_Forms/SignUp";
 import Login from "./Pages/User_Forms/Login";
@@ -15,18 +15,19 @@ import Verify_password from "./Pages/User_Forms/Verify_password";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
-import Loading from "./Components/Loading";
+import Loading from "./Components/Common/Loading";
 import { GetUser } from "./Store/Actions/UserActions";
 import { clearError, clearMessage } from "./Store/Slices/UserSlice";
-import VerifyUser from "./Components/VerifyUser";
+import VerifyUser from "./Components/Common/VerifyUser";
 import About from "./Pages/Hero/About";
-import Contact from "./Components/Contact";
+import Contact from "./Components/Common/Contact";
 import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import DashBoard from "./Pages/DashBoard";
 import Profile from "./Pages/Profile";
 
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import CategoryDashBoard from "./Components/Category/CategoryDashBoard";
+import DailyExpenses from "./Pages/DailyExpenses";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 function App() {
@@ -95,6 +96,7 @@ function App() {
             >
               <Route exact path="/profile" element={<Profile />} />
               <Route exact path="/category" element={<CategoryDashBoard />} />
+              <Route exact path="/dailyexpense" element={<DailyExpenses />} />
             </Route>
 
             {/* Public Routes */}
