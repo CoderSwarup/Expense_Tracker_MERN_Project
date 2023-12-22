@@ -83,14 +83,19 @@ const CategoryWrapper = styled.div`
   margin: 20px 0;
   border-radius: 20px;
   padding: 10px;
-  color: #ffffff !important;
+  color: ${({ theme }) => {
+    return theme.color.primaryContainer.text;
+  }} !important;
 
   h3 {
     width: 200px;
     font-size: 20px;
     margin: 10px 0;
     padding-bottom: 5px;
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid
+      ${({ theme }) => {
+        return theme.color.primaryContainer.text;
+      }};
   }
 
   h2 {
@@ -98,8 +103,14 @@ const CategoryWrapper = styled.div`
     font-size: 17px;
     margin: 10px 0;
     padding: 5px 0;
-    border-top: 2px solid #fff;
-    border-bottom: 2px solid #fff;
+    /* border-top: 2px solid
+      ${({ theme }) => {
+      return theme.color.primaryContainer.text;
+    }}; */
+    border-bottom: 2px solid
+      ${({ theme }) => {
+        return theme.color.primaryContainer.text;
+      }};
   }
   img {
     width: 40px;
@@ -140,7 +151,9 @@ const CategoryWrapper = styled.div`
     width: 500px;
     height: 85vh;
     padding: 20px;
-    background: #202329;
+    background: ${({ theme }) => {
+      return theme.color.primaryContainer.Background;
+    }};
     border-radius: 20px;
     h2 {
       text-transform: capitalize;
@@ -174,7 +187,9 @@ const CategoryWrapper = styled.div`
     width: 100%;
     height: 85vh;
     padding: 20px;
-    background: #202329;
+    background: ${({ theme }) => {
+      return theme.color.primaryContainer.Background;
+    }};
     border-radius: 20px;
     h2 {
       text-transform: capitalize;
@@ -225,7 +240,9 @@ const CategoryWrapper = styled.div`
       .form-icon {
         left: 0;
         top: 5px;
-        color: #000;
+        color: ${({ theme }) => {
+          return theme.color.primaryContainer.text;
+        }};
         position: absolute;
       }
 

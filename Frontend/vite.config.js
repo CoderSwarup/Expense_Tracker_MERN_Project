@@ -14,6 +14,9 @@ export default defineConfig({
       "/api/v1/auth/forgotpassword": BACKENDURL,
       "/api/v1/auth/myprofile": BACKENDURL,
       "/api/v1/auth/verify/user": BACKENDURL,
+
+      //income Expense
+      "/api/v1/incomeexpense/findall/incomeexpense": BACKENDURL,
     },
   },
 });

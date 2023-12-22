@@ -1,7 +1,6 @@
 const categoryModel = require("../Models/category.model");
-const Expense = require("../Models/expense.model");
+const IncomeExpense = require("../Models/incomeexpense.model");
 // const UpdateCategoryTotalAmount = require("./CategoryTotalAmountHelper");
-
 class CategoryExpenseService {
   static async CreateExpenseAndAddInCatrgory(
     name,
@@ -20,7 +19,7 @@ class CategoryExpenseService {
         throw new Error("Category not found for the expense.");
       }
       // Create a new Expense document
-      const newExpense = new Expense({
+      const newExpense = new IncomeExpense({
         name,
         createddate: date,
         amount,
@@ -44,7 +43,7 @@ class CategoryExpenseService {
 
   static async DeleteExpenseAndRemoveFromCategory(expenseId, createduser) {
     try {
-      const deletedExpense = await Expense.findOne({
+      const deletedExpense = await IncomeExpense.findOne({
         _id: expenseId,
         createduser: createduser,
       });
@@ -98,7 +97,7 @@ class CategoryExpenseService {
     category
   ) {
     try {
-      const UpdatedExpense = await Expense.findOne({
+      const UpdatedExpense = await IncomeExpense.findOne({
         _id: expenseid,
         createduser,
       });

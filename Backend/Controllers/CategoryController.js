@@ -4,7 +4,7 @@ const categoryModel = require("../Models/category.model");
 //Create Category
 exports.CreateNewCategoryController = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { name, type } = req.body;
     const createduser = req.user._id;
     if (!name) {
       return res.status(300).send({

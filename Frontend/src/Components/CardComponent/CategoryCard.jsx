@@ -2,7 +2,7 @@ import React from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import { MdDriveFileRenameOutline, MdOutlineAnalytics } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-
+import { Link } from "react-router-dom";
 export default function CategoryCard() {
   return (
     <div>
@@ -20,10 +20,12 @@ export default function CategoryCard() {
               <span>Delete</span>
               <MdDelete className="menu-icon" />
             </div>
-            <div className="menu-data">
-              <span>Analysis</span>
-              <MdOutlineAnalytics className="menu-icon" />
-            </div>
+            <Link className="Link" to="/category/analysis/r4hr4343">
+              <div className="menu-data">
+                <span>Analysis</span>
+                <MdOutlineAnalytics className="menu-icon" />
+              </div>
+            </Link>
           </div>
         </div>
       </div>

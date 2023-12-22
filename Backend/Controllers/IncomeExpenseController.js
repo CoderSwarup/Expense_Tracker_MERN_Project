@@ -1,13 +1,13 @@
-const Expense = require("../Models/expense.model");
 const moment = require("moment");
 const CategoryExpenseService = require("../utils/CategoryExpenseService");
+const IncomeExpense = require("../Models/incomeexpense.model");
 
 const SendErrorResponse = (res, code, message) => {
   return res.status(code).send({ success: false, message });
 };
 
 // Create a new expense
-exports.createExpenseController = async (req, res) => {
+exports.createIncomeExpenseController = async (req, res) => {
   try {
     const { name, createddate, amount, desc, category } = req.body;
     const createduser = req.user._id;
@@ -74,7 +74,7 @@ exports.createExpenseController = async (req, res) => {
 };
 
 // Update Expense
-exports.UpdateExpenseController = async (req, res) => {
+exports.UpdateIncomeExpenseController = async (req, res) => {
   try {
     // Extract request parameters and data
     let expenseid = req.params.expenseid;
@@ -126,7 +126,7 @@ exports.UpdateExpenseController = async (req, res) => {
 };
 
 //Delete Expense
-exports.DeleteExpenseController = async (req, res) => {
+exports.DeleteIncomeExpenseController = async (req, res) => {
   try {
     const expenseId = req.params.expenseid;
     const createduser = req.user._id;
@@ -162,7 +162,7 @@ exports.DeleteExpenseController = async (req, res) => {
 };
 
 // FindAll Expenses
-exports.FindAllExpense = async (req, res) => {
+exports.FindAllIncomeExpense = async (req, res) => {
   try {
     const createduser = req.user._id;
 
@@ -170,9 +170,9 @@ exports.FindAllExpense = async (req, res) => {
       return SendErrorResponse(res, 401, "Unauthorized");
     }
 
-    const FindExpense = await Expense.find({
+    const FindExpense = await IncomeExpense.find({
       createduser: createduser,
-    });
+    }).populate("category", "type");
 
     return res.status(200).send({
       success: true,
@@ -188,7 +188,7 @@ exports.FindAllExpense = async (req, res) => {
   }
 };
 
-exports.FindExpenseOnDateFilter = async (req, res) => {
+exports.FindIncomeExpenseOnDateFilter = async (req, res) => {
   try {
     const createduser = req.user._id;
     const dategte = req.query.dategte || req.query.dategt;
@@ -206,7 +206,7 @@ exports.FindExpenseOnDateFilter = async (req, res) => {
 
     // If the date formats are valid, you can proceed to filter results
     datelte += "T23:59:59.999Z";
-    const expenses = await Expense.find({
+    const expenses = await IncomeExpense.find({
       createduser,
       $and: [
         { createddate: { $gte: new Date(dategte) } },

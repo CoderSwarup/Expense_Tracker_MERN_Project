@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { RiDeleteBinFill } from "react-icons/ri";
 import { MdDateRange } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { GiMoneyStack } from "react-icons/gi";
 import { FaRupeeSign } from "react-icons/fa";
-export default function ExpenseCard() {
+
+export default function ExpenseCard({ incomeexpense }) {
   return (
     <Wrapper>
       <div className="expense d-flex">
@@ -13,18 +14,25 @@ export default function ExpenseCard() {
         <div className="details">
           <div className="top d-flex">
             <p>
-              {" "}
               <MdDateRange />
-              Date
+              {incomeexpense?.createddate.split("T")[0]}
             </p>
-            <p>Category</p>
+            <p
+              style={{
+                background: `${
+                  incomeexpense.category.type == "Expense" ? "red" : "green"
+                }`,
+              }}
+            >
+              {incomeexpense?.category.type}
+            </p>
           </div>
-          <p> Expense Name</p>
+          <p> {incomeexpense?.name}</p>
         </div>
         <div className="money">
           <h4>Your Share</h4>
           <h3>
-            <FaRupeeSign /> 1000
+            <FaRupeeSign /> {incomeexpense?.amount}
           </h3>
         </div>
         <div className="btns">
@@ -41,11 +49,15 @@ export default function ExpenseCard() {
 }
 
 const Wrapper = styled.div`
-  color: #fff !important;
+  color: ${({ theme }) => {
+    return theme.color.primaryContainer.text;
+  }} !important;
   .expense {
     width: 100%;
     margin: 20px 0;
-    background: #202329;
+    background: ${({ theme }) => {
+      return theme.color.primaryContainer.Background;
+    }};
     border-radius: 10px;
     padding: 5px 10px;
   }
@@ -58,13 +70,15 @@ const Wrapper = styled.div`
     .top p {
       font-size: 14px;
       margin: 5px 10px;
-      background: #37373790;
+
       padding: 2px 4px;
     }
 
     p {
       font-size: 18px;
       margin: 5px 0;
+      display: flex;
+      gap: 3px;
     }
   }
 

@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FaRupeeSign } from "react-icons/fa";
 import DoughnutChart from "../Components/Charts/DoughnutChart";
@@ -8,9 +8,15 @@ import ExpenseCard from "../Components/CardComponent/ExpenseCard";
 
 import CategoryDashBoard from "../Components/Category/CategoryDashBoard";
 import DashBoardHeading from "../Components/DashBord/DashBoardHeading";
+import { GetIncomesExpenses } from "../Store/Actions/IncomeExpenseActions";
 
 export default function DashBoard() {
+  const { incomeexpenseslist } = useSelector((state) => state.incomeexpense);
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(GetIncomesExpenses());
+  }, []);
   return (
     <DashBoardContainer className="MainContainer">
       <DashBoardHeading></DashBoardHeading>
@@ -24,7 +30,9 @@ export default function DashBoard() {
         <Expenses>
           <h1>New Payments</h1>
           <div className="expense-container">
-            <ExpenseCard />
+            {incomeexpenseslist.map((incomeexpense) => {
+              return <ExpenseCard incomeexpense={incomeexpense} />;
+            })}
           </div>
         </Expenses>
 
@@ -79,7 +87,9 @@ const DashBoardContainer = styled.div`
 const Category = styled.div``;
 const Expenses = styled.div`
   .expense-container {
-    color: #fff !important;
+    color: ${({ theme }) => {
+      return theme.color.primaryContainer.text;
+    }} !important;
     padding: 0 10px;
     height: 90vh;
     overflow-y: scroll;
@@ -92,25 +102,33 @@ const Expenses = styled.div`
       background: none;
     }
     &::-webkit-scrollbar-thumb {
-      background: #202329;
+      background: ${({ theme }) => {
+        return theme.color.primaryContainer.Background;
+      }};
     }
   }
 `;
 const Charts = styled.div`
   .Date-Container {
-    color: #fff !important;
+    color: ${({ theme }) => {
+      return theme.color.primaryContainer.text;
+    }} !important;
     width: 100%;
     padding: 10px;
     border-radius: 5px;
     margin: 20px auto;
-    background: #191c20;
+    background: ${({ theme }) => {
+      return theme.color.primaryContainer.Background;
+    }};
 
     p {
       font-size: 14px;
       font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
         "Lucida Sans", Arial, sans-serif;
       font-weight: 800;
-      color: #ffffff8f;
+      color: ${({ theme }) => {
+        return theme.color.primaryContainer.textlight;
+      }};
       margin: 5px 0;
     }
 
@@ -130,6 +148,8 @@ const Charts = styled.div`
     width: 100%;
     padding: 10px;
     border-radius: 6px;
-    background: #191c20;
+    background: ${({ theme }) => {
+      return theme.color.primaryContainer.Background;
+    }};
   }
 `;

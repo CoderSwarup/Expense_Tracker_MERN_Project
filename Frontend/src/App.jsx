@@ -25,11 +25,29 @@ import ProtectedRoute from "./Components/ProtectedRoute/ProtectedRoute";
 import DashBoard from "./Pages/DashBoard";
 import Profile from "./Pages/Profile";
 
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from "chart.js";
 import CategoryDashBoard from "./Components/Category/CategoryDashBoard";
 import DailyExpenses from "./Pages/DailyExpenses";
+import CategoryAnalysis from "./Components/Charts/CategoryAnalysis";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 function App() {
   const Dispatch = useDispatch();
   const { loading, isAuthenticated } = useSelector((state) => state.user);
@@ -97,6 +115,11 @@ function App() {
               <Route exact path="/profile" element={<Profile />} />
               <Route exact path="/category" element={<CategoryDashBoard />} />
               <Route exact path="/dailyexpense" element={<DailyExpenses />} />
+              <Route
+                exact
+                path="/category/analysis/:catid"
+                element={<CategoryAnalysis />}
+              />
             </Route>
 
             {/* Public Routes */}

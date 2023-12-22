@@ -7,7 +7,6 @@ const CategorySchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-
     ammountSpend: [
       {
         expense: {
@@ -16,6 +15,12 @@ const CategorySchema = new mongoose.Schema(
         },
       },
     ],
+    type: {
+      type: String,
+      enum: ["Income", "Expense"],
+      default: "Expense",
+      required: true,
+    },
     totalAmountSpend: {
       type: Number,
       default: 0,

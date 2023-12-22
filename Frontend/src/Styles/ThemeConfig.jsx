@@ -15,6 +15,11 @@ export const LightTheme = {
       backgroundColor: "linear-gradient(to bottom, #6674cc, #b578ff)",
       color: "#ffffff",
     },
+    primaryContainer: {
+      Background: "#DDA0DD",
+      text: "#000",
+      textlight: "#0000008f",
+    },
     primaryButton: {
       backgroundColor: " #1028c5",
       color: "#ffffff",
@@ -60,7 +65,11 @@ export const DarkTheme = {
       backgroundColor: "linear-gradient(to bottom, #1f36ce, #674492)",
       color: "#fff",
     },
-
+    primaryContainer: {
+      Background: "#191c20",
+      text: "#fff",
+      textlight: "#ffffff8f",
+    },
     primaryButton: {
       backgroundColor: " #1028c5",
       color: "#ffffff",

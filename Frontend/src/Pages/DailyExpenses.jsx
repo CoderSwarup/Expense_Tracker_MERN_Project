@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import DashBoardHeading from "../Components/DashBord/DashBoardHeading";
 import DoughnutChart from "../Components/Charts/DoughnutChart";
 import ExpenseCard from "../Components/CardComponent/ExpenseCard";
 
 import { TbCoinRupee } from "react-icons/tb";
+import { useDispatch, useSelector } from "react-redux";
+import { GetIncomesExpenses } from "../Store/Actions/IncomeExpenseActions";
 
 export default function DailyExpenses() {
+  const { incomeexpenseslist } = useSelector((state) => state.incomeexpense);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(GetIncomesExpenses());
+  }, []);
   return (
     <Wrapper className="MainContainer">
       <DashBoardHeading />
@@ -35,16 +42,13 @@ export default function DailyExpenses() {
             <DoughnutChart />
           </div>
         </div>
-        <div className="spend-category">
-          <ExpenseCard></ExpenseCard>
-          <ExpenseCard></ExpenseCard>
-          <ExpenseCard></ExpenseCard>
-          <ExpenseCard></ExpenseCard>
-          <ExpenseCard></ExpenseCard>
-          <ExpenseCard></ExpenseCard>
-          <ExpenseCard></ExpenseCard>
-          <ExpenseCard></ExpenseCard>
-          <ExpenseCard></ExpenseCard>
+        <div>
+          <h2>Todays Spend </h2>
+          <div className="spend-category">
+            {incomeexpenseslist.map((incomeexpense) => {
+              return <ExpenseCard incomeexpense={incomeexpense} />;
+            })}
+          </div>
         </div>
       </div>
     </Wrapper>
@@ -52,7 +56,9 @@ export default function DailyExpenses() {
 }
 
 const Wrapper = styled.div`
-  color: #fff !important;
+  color: ${({ theme }) => {
+    return theme.color.primaryContainer.text;
+  }} !important;
   .daily-container {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -60,7 +66,7 @@ const Wrapper = styled.div`
   }
   .black-bg {
     background: ${({ theme }) => {
-      return theme.color.mainBg;
+      return theme.color.primaryContainer.Background;
     }};
     width: 400px;
     text-align: center;
