@@ -119,20 +119,22 @@ exports.DeleteCategoryController = async (req, res) => {
 // Get all Categories
 exports.GetAllCategoriesController = async (req, res) => {
   try {
-    let cretedByuserCategory = req.user._id;
-    const Categories = await categoryModel.find({
-      createduser: cretedByuserCategory,
-    });
+    let createdByUserCategory = req.user._id;
+    const Categories = await categoryModel
+      .find({
+        createduser: createdByUserCategory,
+      })
+      .sort({ createdAt: -1 }); // Sort by createdAt field in descending order
 
     return res.status(200).send({
       success: true,
-      message: "Category Deleted Successfully",
+      message: "Category fetch",
       Categories,
     });
   } catch (error) {
     return res.status(400).send({
       success: false,
-      message: "SomeThing Went Wrong in get Category",
+      message: "Something Went Wrong in get Category",
     });
   }
 };

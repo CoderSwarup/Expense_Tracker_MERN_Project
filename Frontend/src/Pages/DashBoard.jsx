@@ -30,8 +30,8 @@ export default function DashBoard() {
         <Expenses>
           <h1>New Payments</h1>
           <div className="expense-container">
-            {incomeexpenseslist.map((incomeexpense) => {
-              return <ExpenseCard incomeexpense={incomeexpense} />;
+            {incomeexpenseslist.map((incomeexpense, i) => {
+              return <ExpenseCard key={i} incomeexpense={incomeexpense} />;
             })}
           </div>
         </Expenses>

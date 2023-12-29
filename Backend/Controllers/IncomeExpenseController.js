@@ -172,7 +172,7 @@ exports.FindAllIncomeExpense = async (req, res) => {
 
     const FindExpense = await IncomeExpense.find({
       createduser: createduser,
-    }).populate("category", "type");
+    }).populate("category", "name type");
 
     return res.status(200).send({
       success: true,

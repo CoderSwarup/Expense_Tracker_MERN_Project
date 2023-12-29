@@ -1,12 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { HiDotsVertical } from "react-icons/hi";
 import { MdDriveFileRenameOutline, MdOutlineAnalytics } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import CategoryCard from "../CardComponent/CategoryCard";
 import DashBoardHeading from "../DashBord/DashBoardHeading";
+import { useDispatch, useSelector } from "react-redux";
+import { GetCategoryList } from "../../Store/Actions/CategoryActions";
+import { FilterCategory } from "../../utils/Commonfunctions";
 
 export default function CategoryDashBoard({ device = "desktop" }) {
+  const Dispatch = useDispatch();
+  const { categoryList, isLoading, error, message } = useSelector(
+    (state) => state.category
+  );
+
+  const [incomeCategory, setincomeCategory] = useState([]);
+  const [expenseCategory, setexpenseCategory] = useState([]);
+
+  useEffect(() => {
+    Dispatch(GetCategoryList());
+  }, []);
+
+  useEffect(() => {
+    if (categoryList !== 0) {
+      setincomeCategory(FilterCategory(categoryList, "Income"));
+      setexpenseCategory(FilterCategory(categoryList, "Expense"));
+    }
+  }, [categoryList]);
+
   return (
     <>
       {device === "desktop" && (
@@ -36,18 +58,33 @@ export default function CategoryDashBoard({ device = "desktop" }) {
           }`}
         >
           <div className="category">
+            {/* income category */}
             <div className="income-category">
-              <h3>Income Category</h3>
+              <h3 className="in">Income Category</h3>
               <div className="catContainer">
-                <CategoryCard />
+                {incomeCategory.length !== 0 ? (
+                  incomeCategory?.map((ele, i) => {
+                    return <CategoryCard key={i} categoryinfo={ele} />;
+                  })
+                ) : (
+                  <h1 style={{ textAlign: "center" }}>Nothing Found </h1>
+                )}
               </div>
             </div>
+            {/* Expense category */}
             <div className="expense-category">
-              <h3>Expense Category</h3>
+              <h3 className="ex">Expense Category</h3>
               <div className="catContainer">
-                <CategoryCard />
+                {expenseCategory.length !== 0 ? (
+                  expenseCategory?.map((ele, i) => {
+                    return <CategoryCard key={i} categoryinfo={ele} />;
+                  })
+                ) : (
+                  <h1 style={{ textAlign: "center" }}>Nothing Found </h1>
+                )}
               </div>
             </div>
+
             {device === "desktop" && (
               <div className="create-category">
                 <h3>Create Category</h3>
@@ -63,9 +100,15 @@ export default function CategoryDashBoard({ device = "desktop" }) {
                     </form>
                   </div>
                   <div className="recent-category-list">
-                    <h2>Recent Categories</h2>
+                    <h2 className="recen">Recent Categories</h2>
                     <div className="catContainer cat-list">
-                      <CategoryCard />
+                      {categoryList.length !== 0 ? (
+                        categoryList?.map((ele, i) => {
+                          return <CategoryCard key={i} categoryinfo={ele} />;
+                        })
+                      ) : (
+                        <h1 style={{ textAlign: "center" }}>Nothing Found </h1>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -96,6 +139,16 @@ const CategoryWrapper = styled.div`
       ${({ theme }) => {
         return theme.color.primaryContainer.text;
       }};
+  }
+  .in {
+    border-bottom: 2px solid greenyellow;
+  }
+  .ex {
+    border-bottom: 2px solid red;
+  }
+
+  .recen {
+    border-bottom: 2px solid yellow;
   }
 
   h2 {
@@ -147,7 +200,7 @@ const CategoryWrapper = styled.div`
   }
   /* Mobile Container */
   .CategoryContainer.mobile-CategoryContainer {
-    overflow: hidden;
+    /* overflow: hidden; */
     width: 500px;
     height: 85vh;
     padding: 20px;
@@ -162,7 +215,8 @@ const CategoryWrapper = styled.div`
   .mobile-CategoryContainer {
     .category {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      align-items: top;
       height: 100%;
       gap: 30px;
       padding: 10px 0;
@@ -172,6 +226,7 @@ const CategoryWrapper = styled.div`
     .income-category,
     .expense-category,
     .create-category {
+      /* width: 500px !important; */
       height: 50%;
     }
 

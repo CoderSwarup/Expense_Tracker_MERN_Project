@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Button from "../Components/StyleComponent/Button";
 import { CiUser } from "react-icons/ci";
@@ -12,9 +12,18 @@ import { FiUser } from "react-icons/fi";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdLanguage } from "react-icons/md";
 import { MdMarkEmailRead } from "react-icons/md";
+import { LoginUser } from "../Store/Actions/UserActions";
 
 export default function Profile() {
-  const { user, loading } = useSelector((state) => state.user);
+  const { user, loading, isAuthenticated } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const LogoutHandler = (e) => {
+    e.preventDefault();
+    if (isAuthenticated) {
+      dispatch(LoginUser());
+      navigate("/");
+    }
+  };
   return (
     <ProfileWrapper>
       <ProfileContainer className="profile">
@@ -63,7 +72,9 @@ export default function Profile() {
             <h2>Recent Activity</h2>
           </div>
 
-          <Button text="LogOut ➡️" />
+          <div onClick={LogoutHandler}>
+            <Button text="LogOut ➡️" />
+          </div>
         </div>
       </ProfileContainer>
 

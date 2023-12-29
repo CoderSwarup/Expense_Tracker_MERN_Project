@@ -12,7 +12,7 @@ import Login from "./Pages/User_Forms/Login";
 import { useEffect } from "react";
 import Forgot_Password from "./Pages/User_Forms/Forgot_Password";
 import Verify_password from "./Pages/User_Forms/Verify_password";
-import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import Loading from "./Components/Common/Loading";
@@ -38,6 +38,7 @@ import {
 import CategoryDashBoard from "./Components/Category/CategoryDashBoard";
 import DailyExpenses from "./Pages/DailyExpenses";
 import CategoryAnalysis from "./Components/Charts/CategoryAnalysis";
+import useToast from "./Components/Common/ToastContainerComponent";
 
 ChartJS.register(
   CategoryScale,
@@ -49,6 +50,7 @@ ChartJS.register(
   ArcElement
 );
 function App() {
+  const { showToast, ToastContainerComponent } = useToast();
   const Dispatch = useDispatch();
   const { loading, isAuthenticated } = useSelector((state) => state.user);
 
@@ -128,7 +130,7 @@ function App() {
             <Route exact path="*" element={<PageNotFound />} />
           </Routes>
           {/* React toastify */}
-          <ToastContainer
+          {/* <ToastContainer
             position="top-right"
             autoClose={3000}
             hideProgressBar={false}
@@ -139,8 +141,8 @@ function App() {
             draggable
             pauseOnHover
             theme={theme === "light" ? "dark" : "light"}
-          />
-
+          /> */}
+          {ToastContainerComponent()}
           {/* Footer */}
           {!isAuthenticated && <Footer></Footer>}
         </BrowserRouter>

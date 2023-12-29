@@ -27,6 +27,21 @@ body{
     
 }
 
+/* #popup{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+} */
+
+
+#popup{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 .MainContainer{
     width: 100%;
     min-height: 100vh;

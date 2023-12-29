@@ -17,6 +17,10 @@ export default defineConfig({
 
       //income Expense
       "/api/v1/incomeexpense/findall/incomeexpense": BACKENDURL,
+
+      //Category
+
+      "/api/v1/category/getall/category": BACKENDURL,
     },
   },
 });

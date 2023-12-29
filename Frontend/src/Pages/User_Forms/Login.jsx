@@ -6,16 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import Loading from "../../Components/Common/Loading";
 import { MdMarkEmailRead } from "react-icons/md";
 import { FaUnlockAlt } from "react-icons/fa";
-import { toast } from "react-toastify";
 import { LoginUser } from "../../Store/Actions/UserActions";
 import { clearError } from "../../Store/Slices/UserSlice";
 import Button from "../../Components/StyleComponent/Button";
+import useToast from "../../Components/Common/ToastContainerComponent";
 
 export default function Login() {
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useNavigate();
-
+  const { showToast } = useToast();
   const { loading, isAuthenticated, error } = useSelector(
     (state) => state.user
   );
@@ -27,7 +27,7 @@ export default function Login() {
     e.preventDefault();
     try {
       if (!email && !name) {
-        return toast.error("Please Fill All Fields");
+        return showToast("Please Fill All Fields", "error");
       }
       dispatch(LoginUser({ email, password }));
     } catch (error) {}
@@ -39,9 +39,11 @@ export default function Login() {
       history("/", {
         state: location.pathname,
       });
+      showToast("Login successfully ", "success");
     }
     if (error) {
-      toast.error(error);
+      // toast.error(error);
+      showToast(error, "error");
       dispatch(clearError());
     }
   }, [dispatch, isAuthenticated, error]);
