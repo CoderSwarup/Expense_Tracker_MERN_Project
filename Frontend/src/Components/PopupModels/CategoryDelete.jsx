@@ -70,6 +70,7 @@ const ModalWrapper = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+  backdrop-filter: blur(10px);
   background: rgba(0, 0, 0, 0.5); /* semi-transparent black overlay */
 `;
 

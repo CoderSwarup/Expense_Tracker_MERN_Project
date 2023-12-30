@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 export default function Footer() {
+  const { isAuthenticated } = useSelector((state) => state.user);
   return (
     <Container>
       <div className="footer-body-1">
@@ -12,21 +14,54 @@ export default function Footer() {
       <div className="footer-body-2">
         <span>Contact Us</span>
         <div className="contact-container">
-          <div>G</div>
-          <div>I</div>
-          <div>L</div>
-          <div>W</div>
           <div>
-            <img src="/assets/profile.png" alt="" />
+            <Link to="https://github.com/CoderSwarup" className="Link">
+              <img src="/assets/icons/github.png" alt="" />
+            </Link>
           </div>
+          <div>
+            <Link
+              to="https://www.instagram.com/swarup_bhise@999/"
+              className="Link"
+            >
+              <img src="/assets/icons/instagram.png" alt="" />
+            </Link>
+          </div>
+          <div>
+            <Link to="" className="Link">
+              <img src="/assets/icons/linkedin.png" alt="" />
+            </Link>
+          </div>
+          <div>
+            <Link
+              to="https://api.whatsapp.com/send?phone=918308657425&text=Hi"
+              className="Link"
+            >
+              <img src="/assets/icons/whatsapp.png" alt="" />
+            </Link>
+          </div>
+          {/* <div>
+            <img src="/assets/profile.png" alt="" />
+          </div> */}
         </div>
       </div>
       <div className="footer-body-3">
-        <ul>
-          <li>Categories</li>
-          <li>Analetic</li>
-          <li>Profile</li>
-        </ul>
+        {isAuthenticated ? (
+          <ul>
+            <li>Categories</li>
+            <li>Analetic</li>
+            <li>Profile</li>
+          </ul>
+        ) : (
+          <ul>
+            <Link className="Link" to="/signin">
+              <li>SignIn</li>
+            </Link>
+            <Link className="Link" to="/login">
+              <li>LogIn</li>
+            </Link>
+          </ul>
+        )}
       </div>
       <div className="footer-body-4">
         <p>DOWLOAD APP</p>
@@ -76,8 +111,12 @@ const Container = styled.div`
         font-size: 80px;
         font-family: "CustomFont";
         img {
-          width: 80px;
+          width: 50px;
           border-radius: 100%;
+          cursor: pointer;
+          &:hover {
+            transform: scale(1.2);
+          }
         }
       }
     }
@@ -91,6 +130,7 @@ const Container = styled.div`
       margin: 10px 0;
       padding: 10px 0;
       width: 200px;
+      color: #fff !important;
 
       &::before {
         position: absolute;

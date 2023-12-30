@@ -12,7 +12,7 @@ import { FiUser } from "react-icons/fi";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdLanguage } from "react-icons/md";
 import { MdMarkEmailRead } from "react-icons/md";
-import { LoginUser } from "../Store/Actions/UserActions";
+import { LogoutUser } from "../Store/Actions/UserActions";
 
 export default function Profile() {
   const { user, loading, isAuthenticated } = useSelector((state) => state.user);
@@ -20,7 +20,7 @@ export default function Profile() {
   const LogoutHandler = (e) => {
     e.preventDefault();
     if (isAuthenticated) {
-      dispatch(LoginUser());
+      dispatch(LogoutUser());
       navigate("/");
     }
   };
@@ -48,22 +48,22 @@ export default function Profile() {
             <p>
               {" "}
               <CiUser />
-              User Name
+              {user?.user.name}
             </p>
             <p>
               {" "}
               <CgCalendarDates />
-              Joined Date
+              {user?.user.createdAt.split("T")[0]}
             </p>
-            <p>
+            {/* <p>
               {" "}
               <FaMobileAlt />
-              Mobile
-            </p>
+            </p> */}
             <p>
               {" "}
               <MdOutlineMarkEmailRead />
               Email
+              {user?.user.email}
             </p>
           </div>
         </div>

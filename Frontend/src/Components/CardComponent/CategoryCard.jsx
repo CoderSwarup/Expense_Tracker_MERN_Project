@@ -4,23 +4,32 @@ import { MdDriveFileRenameOutline, MdOutlineAnalytics } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import CategoryDelete from "../PopupModels/CategoryDelete";
+import CategoryEdit from "../PopupModels/CategoryEdit";
 export default function CategoryCard({ categoryinfo }) {
-  const [show, setShow] = useState(false);
+  const [showDeleteModel, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   return (
     <div>
-      {show && <CategoryDelete catinfo={categoryinfo} />}
+      {showDeleteModel && <CategoryDelete catinfo={categoryinfo} />}
+      {showEditModal && <CategoryEdit catinfo={categoryinfo} />}
       <div className="category-details">
         <img src="/Profile.png" alt="" />
         <p>{categoryinfo.name}</p>
         <div className="cat-menu">
           <HiDotsVertical className="icon" />
           <div className="menu-details">
-            <div className="menu-data">
+            <div
+              className="menu-data"
+              onClick={() => setShowEditModal(!showEditModal)}
+            >
               <span>Edit</span>
               <MdDriveFileRenameOutline className="menu-icon" />
             </div>
-            <div className="menu-data" onClick={() => setShow(!show)}>
+            <div
+              className="menu-data"
+              onClick={() => setShowDeleteModal(!showDeleteModel)}
+            >
               <span>Delete</span>
               <MdDelete className="menu-icon" />
             </div>

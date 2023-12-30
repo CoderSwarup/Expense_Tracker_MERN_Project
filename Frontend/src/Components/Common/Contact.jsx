@@ -90,7 +90,7 @@ export default function Contact() {
 
         <ContactInfo>
           <FormTitle>Contact Information</FormTitle>
-          <ContactEmail>support@codehelp.in</ContactEmail>
+          <ContactEmail>support@rupeeguardian.in</ContactEmail>
           <div className="icons">
             <a href="https://www.instagram.com/swarup_bhise999/">
               <img src="/assets/icons/instagram.png" alt="instagram" />
