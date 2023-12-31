@@ -1,22 +1,65 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FaRupeeSign } from "react-icons/fa";
 import DoughnutChart from "../Components/Charts/DoughnutChart";
 import { FcDoughnutChart } from "react-icons/fc";
 import ExpenseCard from "../Components/CardComponent/ExpenseCard";
-
 import CategoryDashBoard from "../Components/Category/CategoryDashBoard";
 import DashBoardHeading from "../Components/DashBord/DashBoardHeading";
 import { GetIncomesExpenses } from "../Store/Actions/IncomeExpenseActions";
+import { GetCategoryList } from "../Store/Actions/CategoryActions";
+import {
+  getCurrentMonthAndDays,
+  getMonthNames,
+} from "../utils/getMonthAndNoOfDay";
+
+// Sample Data
+// const categories = [
+//   { name: "Food", amount: 300 },
+//   { name: "Transportation", amount: 150 },
+//   { name: "Housing", amount: 500 },
+//   { name: "Entertainment", amount: 200 },
+//   { name: "Others", amount: 100 },
+
+// ];
 
 export default function DashBoard() {
+  const dispatch = useDispatch();
+
   const { incomeexpenseslist } = useSelector((state) => state.incomeexpense);
   const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const { categoryList } = useSelector((state) => state.category);
+
+  const { currentYear, currentMonth, numberOfDaysInMonth } =
+    getCurrentMonthAndDays();
+  const { monthShortForm } = getMonthNames(currentMonth);
+  const [filteredData, setFilteredData] = useState([]);
+  const [totalSpend, setTotalSpend] = useState(0);
+
   useEffect(() => {
     dispatch(GetIncomesExpenses());
-  }, []);
+    dispatch(GetCategoryList());
+  }, [dispatch]);
+
+  useEffect(() => {
+    // Filter the data based on the current month and number of days
+    const filteredData = incomeexpenseslist.filter((item) => {
+      const itemDate = new Date(item.createddate);
+      const itemMonth = itemDate.getMonth() + 1; // Adding 1 because months are 0-indexed
+      const itemDay = itemDate.getDate();
+
+      return itemMonth === currentMonth && itemDay <= numberOfDaysInMonth;
+    });
+
+    setFilteredData(filteredData);
+    let totalSpend = filteredData.reduce(
+      (total, item) => total + item.amount,
+      0
+    );
+    setTotalSpend(totalSpend);
+  }, [incomeexpenseslist, currentMonth, numberOfDaysInMonth]);
+
   return (
     <DashBoardContainer className="MainContainer">
       <DashBoardHeading></DashBoardHeading>
@@ -42,21 +85,31 @@ export default function DashBoard() {
 
           <div className="Date-Container d-flex">
             <div className="date-range">
-              <p>Spend in Aug 1 - Aug 7</p>
+              <p>
+                Spend in {monthShortForm} 1 - {monthShortForm}{" "}
+                {numberOfDaysInMonth}
+              </p>
               <h3 className="d-flex">
                 <FaRupeeSign />
-                27000/2000
+                {/* {data.reduce((total, item) => total + item.amount, 0)} */}
+                {totalSpend}/{user?.user?.monthlyBudget}
               </h3>
             </div>
             <div className="used-money">
-              <p>69% budget used</p>
+              <p>
+                {(
+                  ((filteredData.length > 0 ? totalSpend : 0) / 2000) *
+                  100
+                ).toFixed(0)}
+                % budget used
+              </p>
 
               <FcDoughnutChart className="icon-dount" />
             </div>
           </div>
 
           <div className="Chart-Container">
-            <DoughnutChart></DoughnutChart>
+            <DoughnutChart categories={categoryList}></DoughnutChart>
           </div>
         </Charts>
       </div>

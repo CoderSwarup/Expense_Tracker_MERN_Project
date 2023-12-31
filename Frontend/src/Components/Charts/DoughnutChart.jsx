@@ -1,18 +1,19 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 
-const categories = [
-  { name: "Food", amount: 300 },
-  { name: "Transportation", amount: 150 },
-  { name: "Housing", amount: 500 },
-  { name: "Entertainment", amount: 200 },
-  { name: "Others", amount: 100 },
-  // Additional 10 categories
-];
+// Smaple Data
+// const categories = [
+//   { name: "Food", amount: 300 },
+//   // { name: "Transportation", amount: 150 },
+//   // { name: "Housing", amount: 500 },
+//   // { name: "Entertainment", amount: 200 },
+//   // { name: "Others", amount: 100 },
+//   // Additional 10 categories
+// ];
 
-export default function DoughnutChart() {
+export default function DoughnutChart({ categories = [] }) {
   const dataset = {
-    data: categories.map((category) => category.amount),
+    data: categories.map((category) => category.totalAmountSpend),
     borderColor: "black",
     backgroundColor: [
       "rgba(255, 99, 133, 0.783)",
@@ -56,7 +57,20 @@ export default function DoughnutChart() {
         margin: "auto",
       }}
     >
-      <Doughnut data={sampleData} options={sampleOptions} />
+      {categories && categories.length > 0 ? (
+        <>
+          <Doughnut data={sampleData} options={sampleOptions} />
+          <h2
+            style={{
+              margin: "18px 0",
+            }}
+          >
+            Most Used Categories
+          </h2>
+        </>
+      ) : (
+        <h2>No Any Categories Created</h2>
+      )}
     </div>
   );
 }

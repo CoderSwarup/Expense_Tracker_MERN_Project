@@ -107,6 +107,7 @@ exports.RegisterUserController = async (req, res) => {
       message: "User Register Successfully Please Verify Email",
     });
   } catch (error) {
+    console.log(error);
     if (error instanceof Error) {
       return res.status(400).json({
         success: false,

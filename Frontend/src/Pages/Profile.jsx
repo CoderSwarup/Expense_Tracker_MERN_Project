@@ -13,6 +13,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdLanguage } from "react-icons/md";
 import { MdMarkEmailRead } from "react-icons/md";
 import { LogoutUser } from "../Store/Actions/UserActions";
+import { FaRupeeSign } from "react-icons/fa";
 
 export default function Profile() {
   const { user, loading, isAuthenticated } = useSelector((state) => state.user);
@@ -156,6 +157,29 @@ export default function Profile() {
                     {user?.user.createdAt.split("T")[0]} <FaRegCalendarAlt />
                   </p>
                 </li>
+              </div>
+
+              <div className="left-center d-flex">
+                <li>
+                  <h3>Monthly Budget</h3>
+                  <p
+                    style={{
+                      fontSize: "18px",
+                      display: "flex",
+                      gap: "10px",
+                      margin: "5px 0",
+                    }}
+                  >
+                    <FaRupeeSign /> {user?.user?.monthlyBudget}
+                  </p>
+                </li>
+                {/* 
+                <li>
+                  <h3>BirthDate</h3>
+                  <p className="text d-flex">
+                    My name is <FaRegCalendarAlt />
+                  </p>
+                </li> */}
               </div>
 
               <div className="left-bottom d-flex ">

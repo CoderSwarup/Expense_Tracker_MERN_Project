@@ -6,17 +6,18 @@ import { FaRegUserCircle, FaUnlock } from "react-icons/fa";
 import { MdMarkEmailRead } from "react-icons/md";
 import { IoCall } from "react-icons/io5";
 import { FaLock } from "react-icons/fa6";
-import { toast } from "react-toastify";
 import { RegisterUser } from "../../Store/Actions/UserActions";
 import { clearError, clearMessage } from "../../Store/Slices/UserSlice";
 import Button from "../../Components/StyleComponent/Button";
+import useToast from "../../Components/Common/ToastContainerComponent";
 
 export default function SignUp() {
+  const { showToast } = useToast();
   const dispatch = useDispatch();
   const history = useNavigate();
   const [email, setemail] = useState("");
   const [name, setName] = useState("");
-  const [mobile, setMobile] = useState(undefined);
+  // const [mobile, setMobile] = useState(undefined);
   const [password, setPassword] = useState(undefined);
   const [cpassword, setCPassword] = useState(undefined);
   const [avatar, setAvatar] = useState("/Profile.png");
@@ -47,15 +48,18 @@ export default function SignUp() {
   const SubmitRegisterForm = (e) => {
     e.preventDefault();
 
-    if ((!email || !name, !mobile, !password, !cpassword, !gender)) {
-      return toast.info("Please Fill All Fields");
+    if ((!email || !name, !password, !cpassword, !gender)) {
+      return showToast("Please Fill All Fields", "warn");
     }
 
-    if (name.length < 4) return toast.info("Name Must be 4 letters");
+    if (name.length < 4) return showToast("Name Must be 4 letters", "info");
+
+    if (password !== cpassword)
+      return showToast("Password Must be Same ", "error");
     let formdata = new FormData();
     formdata.append("name", name);
     formdata.append("email", email);
-    formdata.append("mobile", mobile);
+    // formdata.append("mobile", mobile);
     formdata.append("password", password);
     formdata.append("gender", gender);
     formdata.append("cpassword", cpassword);
@@ -72,12 +76,13 @@ export default function SignUp() {
       });
     }
     if (message) {
-      toast.success(message);
+      showToast("Register User Successfully!", "success");
+      showToast("Please Verify Your Email", "info");
       dispatch(clearMessage());
     }
 
     if (error) {
-      toast.error(error);
+      showToast("Sorry User Not Register", "error");
       dispatch(clearError());
     }
   }, [dispatch, message, isAuthenticated, error]);
@@ -112,7 +117,7 @@ export default function SignUp() {
               />
             </div>
           </div>
-
+          {/* 
           <div className="mobile">
             <span> Mobile </span>
             <div className="input">
@@ -126,7 +131,7 @@ export default function SignUp() {
                 autoComplete="mobile"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="gender">
             <span> Gender </span>

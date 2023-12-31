@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: ["Male", "FeMale", "Other"],
+      enum: ["Male", "Female", "Other"],
       // required: true,
     },
     avatar: {
@@ -37,6 +37,10 @@ const UserSchema = new mongoose.Schema(
         type: String,
         required: true,
       },
+    },
+    monthlyBudget: {
+      type: Number,
+      default: 0,
     },
     isValidUser: {
       type: Boolean,
