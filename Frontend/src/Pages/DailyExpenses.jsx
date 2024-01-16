@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DashBoardHeading from "../Components/DashBord/DashBoardHeading";
 import DoughnutChart from "../Components/Charts/DoughnutChart";
-import ExpenseCard from "../Components/CardComponent/ExpenseCard";
 import Button from "../Components/StyleComponent/Button";
 import { TbCoinRupee } from "react-icons/tb";
 import { useDispatch, useSelector } from "react-redux";
 import { GetIncomesExpenses } from "../Store/Actions/IncomeExpenseActions";
+import TransactionCard from "../Components/CardComponent/TransactionCard";
 
 export default function DailyExpenses() {
   let { incomeexpenseslist } = useSelector((state) => state.incomeexpense);
@@ -83,7 +83,9 @@ export default function DailyExpenses() {
             <h2>Todays Spend </h2>
             <div className="spend-category">
               {displayList.map((incomeexpense, i) => {
-                return <ExpenseCard key={i} incomeexpense={incomeexpense} />;
+                return (
+                  <TransactionCard key={i} incomeexpense={incomeexpense} />
+                );
               })}
             </div>
           </div>

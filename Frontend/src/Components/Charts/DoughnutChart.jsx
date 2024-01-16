@@ -37,11 +37,12 @@ export default function DoughnutChart({ categories = [] }) {
   };
 
   const sampleData = {
-    labels: categories.map((category) => category.name),
+    labels: categories.map((category) => category.name.slice(0, 9)),
     datasets: [dataset],
   };
 
   const sampleOptions = {
+    responsive: true,
     title: {
       display: true,
       text: "Expense Categories",
@@ -53,24 +54,11 @@ export default function DoughnutChart({ categories = [] }) {
       style={{
         padding: "10px",
         borderRadius: "10px",
-        width: "400px",
+        maxWidth: "400px",
         margin: "auto",
       }}
     >
-      {categories && categories.length > 0 ? (
-        <>
-          <Doughnut data={sampleData} options={sampleOptions} />
-          <h2
-            style={{
-              margin: "18px 0",
-            }}
-          >
-            Most Used Categories
-          </h2>
-        </>
-      ) : (
-        <h2>No Any Categories Created</h2>
-      )}
+      <Doughnut data={sampleData} options={sampleOptions} />
     </div>
   );
 }

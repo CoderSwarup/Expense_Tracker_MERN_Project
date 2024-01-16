@@ -34,10 +34,11 @@ import {
   Tooltip,
   Legend,
   ArcElement,
+  PointElement,
+  LineElement,
 } from "chart.js";
 import CategoryDashBoard from "./Components/Category/CategoryDashBoard";
 import DailyExpenses from "./Pages/DailyExpenses";
-import CategoryAnalysis from "./Components/Charts/CategoryAnalysis";
 import useToast from "./Components/Common/ToastContainerComponent";
 
 ChartJS.register(
@@ -47,7 +48,9 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
+  PointElement,
+  LineElement
 );
 function App() {
   const { showToast, ToastContainerComponent } = useToast();
@@ -73,64 +76,65 @@ function App() {
     <>
       <ThemeProvider theme={Theme}>
         <GlobalStyle></GlobalStyle>
-        <BrowserRouter>
-          {loading && <Loading></Loading>}
-          <Header theme={theme} setTheme={setTheme}></Header>
-          <Routes>
-            {/* Main Page */}
-            {!isAuthenticated ? (
-              <>
-                <Route exact path="/" element={<Home />}></Route>
-                {/* Forgot Password Page */}
-                <Route
-                  exact
-                  path="/forgot/password"
-                  element={<Forgot_Password />}
-                />
+        <div className="WorkingBox">
+          <BrowserRouter>
+            {loading && <Loading></Loading>}
+            <Header theme={theme} setTheme={setTheme}></Header>
+            <Routes>
+              {/* Main Page */}
+              {!isAuthenticated ? (
+                <>
+                  <Route exact path="/" element={<Home />}></Route>
+                  {/* Forgot Password Page */}
+                  <Route
+                    exact
+                    path="/forgot/password"
+                    element={<Forgot_Password />}
+                  />
 
-                <Route
-                  exact
-                  path="/reset/password-verify/:token"
-                  element={<Verify_password />}
-                />
+                  <Route
+                    exact
+                    path="/reset/password-verify/:token"
+                    element={<Verify_password />}
+                  />
 
-                <Route
-                  exact
-                  path="/verify/user/:token"
-                  element={<VerifyUser />}
-                />
-              </>
-            ) : (
-              <Route exact path="/" element={<DashBoard />} />
-            )}
+                  <Route
+                    exact
+                    path="/verify/user/:token"
+                    element={<VerifyUser />}
+                  />
+                </>
+              ) : (
+                <Route exact path="/" element={<DashBoard />} />
+              )}
 
-            {/* Login Page */}
-            <Route exact path="/login" element={<Login />} />
+              {/* Login Page */}
+              <Route exact path="/login" element={<Login />} />
 
-            {/* Register Page */}
-            <Route exact path="/signin" element={<SignUp />} />
+              {/* Register Page */}
+              <Route exact path="/signin" element={<SignUp />} />
 
-            {/* Protected Routes */}
-            <Route
-              element={<ProtectedRoute isAuthenticated={isAuthenticated} />}
-            >
-              <Route exact path="/profile" element={<Profile />} />
-              <Route exact path="/category" element={<CategoryDashBoard />} />
-              <Route exact path="/dailyexpense" element={<DailyExpenses />} />
+              {/* Protected Routes */}
               <Route
-                exact
-                path="/category/analysis/:catid"
-                element={<CategoryAnalysis />}
-              />
-            </Route>
+                element={<ProtectedRoute isAuthenticated={isAuthenticated} />}
+              >
+                <Route exact path="/profile" element={<Profile />} />
+                <Route exact path="/category" element={<CategoryDashBoard />} />
+                <Route exact path="/dailyexpense" element={<DailyExpenses />} />
+                <Route
+                  exact
+                  path="/category/analysis/:catid"
+                  element={<h1>Analysis</h1>}
+                />
+              </Route>
 
-            {/* Public Routes */}
-            <Route exact path="/aboutus" element={<About />} />
-            <Route exact path="/contact" element={<Contact />} />
-            <Route exact path="*" element={<PageNotFound />} />
-          </Routes>
-          {/* React toastify */}
-          {/* <ToastContainer
+              {/* Public Routes */}
+              <Route exact path="/aboutus" element={<About />} />
+              <Route exact path="/contact" element={<Contact />} />
+              <Route exact path="*" element={<PageNotFound />} />
+            </Routes>
+            {/* React toastify */}
+            {/* <ToastContainer
             position="top-right"
             autoClose={3000}
             hideProgressBar={false}
@@ -142,10 +146,11 @@ function App() {
             pauseOnHover
             theme={theme === "light" ? "dark" : "light"}
           /> */}
-          {ToastContainerComponent()}
-          {/* Footer */}
-          {!isAuthenticated && <Footer></Footer>}
-        </BrowserRouter>
+            {ToastContainerComponent()}
+            {/* Footer */}
+            {!isAuthenticated && <Footer></Footer>}
+          </BrowserRouter>
+        </div>
       </ThemeProvider>
     </>
   );

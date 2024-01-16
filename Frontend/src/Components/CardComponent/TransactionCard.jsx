@@ -1,14 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { RiDeleteBinFill } from "react-icons/ri";
 import { MdDateRange } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { GiMoneyStack } from "react-icons/gi";
 import { FaRupeeSign } from "react-icons/fa";
+import TransactionEditModal from "../PopupModels/TransactionEditModal";
+import TransactionDeleteModal from "../PopupModels/TransactionDeleteModal";
 
-export default function ExpenseCard({ incomeexpense }) {
+export default function TransactionCard({ incomeexpense }) {
+  const [show, setShow] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   return (
     <Wrapper>
+      {show && (
+        <TransactionEditModal
+          transactionInfo={incomeexpense}
+          setShow={setShow}
+        ></TransactionEditModal>
+      )}
+      {showDeleteModal && (
+        <TransactionDeleteModal
+          transactoninfo={incomeexpense}
+          setShowDeleteModal={setShowDeleteModal}
+        ></TransactionDeleteModal>
+      )}
       <div className="expense d-flex">
         <GiMoneyStack className="icon icon-cash" />
         <div className="details">
@@ -36,10 +52,20 @@ export default function ExpenseCard({ incomeexpense }) {
           </h3>
         </div>
         <div className="btns">
-          <button className="edit">
+          <button
+            onClick={() => {
+              setShow(true);
+            }}
+            className="edit"
+          >
             <MdEdit />
           </button>
-          <button className="delete">
+          <button
+            onClick={() => {
+              setShowDeleteModal(true);
+            }}
+            className="delete"
+          >
             <RiDeleteBinFill />
           </button>
         </div>

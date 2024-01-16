@@ -62,6 +62,7 @@ export default function Header({ theme, setTheme }) {
           </Link>
         </div>
       </div>
+
       <div className="right">
         {isAuthenticated ? (
           <>
@@ -86,18 +87,15 @@ export default function Header({ theme, setTheme }) {
           </>
         ) : (
           <>
-            <button>
-              <Link className="Link" to="/signIn">
-                SignIn
-              </Link>
-            </button>
-            <button>
-              <Link className="Link" to="/login">
-                LogIn
-              </Link>
-            </button>
+            <Link className="Link" to="/signIn">
+              <button className="AuthBtn">SignIn</button>
+            </Link>
+            <Link className="Link" to="/login">
+              <button className="AuthBtn">LogIn</button>
+            </Link>
           </>
         )}
+
         <div className="themebutton">
           <div onClick={ThemeHandler}>
             {theme === "light" ? (
@@ -109,7 +107,7 @@ export default function Header({ theme, setTheme }) {
         </div>
         <div onClick={toggleMenuHandler}>
           <img
-            className={theme == "light" ? "menu" : "menu-dark"}
+            className={theme == "light" ? "menu " : " menu menu-dark"}
             src="/assets/icons/menu.png"
           ></img>
         </div>
@@ -217,6 +215,12 @@ const Mainheader = styled.div`
     font-weight: 700;
     background: #fff;
     cursor: pointer;
+
+    @media screen and (max-width: 450px) {
+      padding: 5px;
+      font-size: 12px;
+      font-weight: 500;
+    }
   }
 
   .right {
@@ -300,6 +304,39 @@ const Mainheader = styled.div`
   .new {
     transform: translate(0);
   }
+
+  @media screen and (max-width: 550px) {
+    padding: 5px 10px;
+  }
+
+  @media screen and (max-width: 450px) {
+    padding: 5px 10px;
+
+    .left {
+      .logo {
+        img {
+          width: 36px;
+        }
+
+        p {
+          font-size: 29px;
+        }
+      }
+    }
+
+    .right {
+      gap: 10px;
+      .themebutton {
+        img {
+          width: 20px;
+        }
+      }
+    }
+
+    .menu {
+      width: 28px !important;
+    }
+  }
 `;
 
 const UserProfile = styled.div`
@@ -312,10 +349,15 @@ const UserProfile = styled.div`
     margin: 10px 0;
   }
   img {
-    width: 60px !important;
-    height: 60px !important;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
     cursor: pointer;
+
+    @media screen and (max-width: 450px) {
+      width: 30px;
+      height: 30px;
+    }
   }
 
   &:hover .profile_manager {

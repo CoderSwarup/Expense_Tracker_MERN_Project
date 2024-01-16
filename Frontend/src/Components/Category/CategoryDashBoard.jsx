@@ -150,6 +150,18 @@ const CategoryWrapper = styled.div`
   .recen {
     border-bottom: 2px solid yellow;
   }
+  @media screen and (max-width: 530px) {
+    h3 {
+      width: 150px;
+      font-size: 17px;
+    }
+  }
+  @media screen and (max-width: 380px) {
+    h3 {
+      width: 100px;
+      font-size: 10px;
+    }
+  }
 
   h2 {
     width: 180px;
@@ -194,8 +206,13 @@ const CategoryWrapper = styled.div`
     p {
       width: 80%;
       font-size: 16px;
-
       font-weight: 700;
+    }
+    @media screen and (max-width: 400px) {
+      p,
+      .icon {
+        font-size: 10px;
+      }
     }
   }
   /* Mobile Container */
@@ -210,6 +227,10 @@ const CategoryWrapper = styled.div`
     border-radius: 20px;
     h2 {
       text-transform: capitalize;
+    }
+
+    @media screen and (max-width: 900px) {
+      width: 90vw;
     }
   }
   .mobile-CategoryContainer {
@@ -238,7 +259,7 @@ const CategoryWrapper = styled.div`
   /* Desktop Container */
 
   .CategoryContainer.desktop-CategoryContainer {
-    overflow: hidden;
+    overflow-x: hidden;
     width: 100%;
     height: 85vh;
     padding: 20px;
@@ -250,6 +271,7 @@ const CategoryWrapper = styled.div`
       text-transform: capitalize;
     }
   }
+
   .desktop-CategoryContainer {
     .category {
       display: grid;
@@ -269,6 +291,18 @@ const CategoryWrapper = styled.div`
     /* .income-category {
     margin: 10px 0;
   } */
+    @media screen and (max-width: 800px) {
+      .category {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1dr 1fr;
+      }
+
+      .income-category,
+      .expense-category,
+      .create-category {
+        height: 100px;
+      }
+    }
   }
 
   .addcategoryContainer {

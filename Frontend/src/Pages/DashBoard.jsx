@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { FaRupeeSign } from "react-icons/fa";
 import DoughnutChart from "../Components/Charts/DoughnutChart";
 import { FcDoughnutChart } from "react-icons/fc";
-import ExpenseCard from "../Components/CardComponent/ExpenseCard";
 import CategoryDashBoard from "../Components/Category/CategoryDashBoard";
 import DashBoardHeading from "../Components/DashBord/DashBoardHeading";
 import { GetIncomesExpenses } from "../Store/Actions/IncomeExpenseActions";
@@ -13,6 +12,8 @@ import {
   getCurrentMonthAndDays,
   getMonthNames,
 } from "../utils/getMonthAndNoOfDay";
+import ChartContainer from "../Components/Charts/ChartContainer";
+import TransactionCard from "../Components/CardComponent/TransactionCard";
 
 // Sample Data
 // const categories = [
@@ -31,6 +32,9 @@ export default function DashBoard() {
   const { user } = useSelector((state) => state.user);
   const { categoryList } = useSelector((state) => state.category);
 
+  const [selectedType, setSelectedType] = useState("Expense");
+  const [filteredCategories, setFilteredCategories] = useState(categoryList);
+
   const { currentYear, currentMonth, numberOfDaysInMonth } =
     getCurrentMonthAndDays();
   const { monthShortForm } = getMonthNames(currentMonth);
@@ -43,6 +47,13 @@ export default function DashBoard() {
   }, [dispatch]);
 
   useEffect(() => {
+    // Filter categories based on the selected type
+    setFilteredCategories(
+      categoryList.filter((category) => category.type === selectedType)
+    );
+  }, [selectedType, categoryList]);
+
+  useEffect(() => {
     // Filter the data based on the current month and number of days
     const filteredData = incomeexpenseslist.filter((item) => {
       const itemDate = new Date(item.createddate);
@@ -53,12 +64,16 @@ export default function DashBoard() {
     });
 
     setFilteredData(filteredData);
-    let totalSpend = filteredData.reduce(
-      (total, item) => total + item.amount,
-      0
-    );
+
+    let totalSpend = filteredData.reduce((total, item) => {
+      // Only add the amount if the category type matches the selectedType
+      if (item.category.type === selectedType) {
+        return total + item.amount;
+      }
+      return total;
+    }, 0);
     setTotalSpend(totalSpend);
-  }, [incomeexpenseslist, currentMonth, numberOfDaysInMonth]);
+  }, [incomeexpenseslist, currentMonth, numberOfDaysInMonth, selectedType]);
 
   return (
     <DashBoardContainer className="MainContainer">
@@ -74,43 +89,75 @@ export default function DashBoard() {
           <h1>New Payments</h1>
           <div className="expense-container">
             {incomeexpenseslist.map((incomeexpense, i) => {
-              return <ExpenseCard key={i} incomeexpense={incomeexpense} />;
+              return <TransactionCard key={i} incomeexpense={incomeexpense} />;
             })}
           </div>
         </Expenses>
 
         {/* Chart Analysis */}
         <Charts>
-          <h1>Analysis</h1>
+          <div className="ChatHeader">
+            <h1>Category Analysis</h1>
+            <div className="select-type">
+              <select
+                className="StyledSelect"
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+              >
+                <option className="StyledOption" value="Expense">
+                  Expense
+                </option>
+                <option className="StyledOption" value="Income">
+                  Income
+                </option>
+              </select>
+            </div>
+          </div>
 
           <div className="Date-Container d-flex">
-            <div className="date-range">
-              <p>
-                Spend in {monthShortForm} 1 - {monthShortForm}{" "}
-                {numberOfDaysInMonth}
-              </p>
-              <h3 className="d-flex">
-                <FaRupeeSign />
-                {/* {data.reduce((total, item) => total + item.amount, 0)} */}
-                {totalSpend}/{user?.user?.monthlyBudget}
-              </h3>
-            </div>
-            <div className="used-money">
-              <p>
-                {(
-                  ((filteredData.length > 0 ? totalSpend : 0) / 2000) *
-                  100
-                ).toFixed(0)}
-                % budget used
-              </p>
+            {selectedType === "Expense" ? (
+              <>
+                <div className="date-range">
+                  <p>
+                    Spend in {monthShortForm} 1 - {monthShortForm}{" "}
+                    {numberOfDaysInMonth}
+                  </p>
+                  <h3 className="d-flex">
+                    <FaRupeeSign />
+                    {/* {data.reduce((total, item) => total + item.amount, 0)} */}
+                    {totalSpend}/{user?.user?.monthlyBudget}
+                  </h3>
+                </div>
+                <div className="used-money">
+                  <p>
+                    {(
+                      ((filteredData.length > 0 ? totalSpend : 0) /
+                        user?.user?.monthlyBudget) *
+                      100
+                    ).toFixed(0)}
+                    % budget used
+                  </p>
 
-              <FcDoughnutChart className="icon-dount" />
-            </div>
+                  <FcDoughnutChart className="icon-dount" />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="date-range">
+                  <p>
+                    Earned in {monthShortForm} 1 - {monthShortForm}{" "}
+                    {numberOfDaysInMonth} 🤑
+                  </p>
+                  <h3 className="d-flex">
+                    <FaRupeeSign />
+                    {totalSpend}
+                  </h3>
+                </div>
+              </>
+            )}
           </div>
 
-          <div className="Chart-Container">
-            <DoughnutChart categories={categoryList}></DoughnutChart>
-          </div>
+          <ChartContainer categoryList={filteredCategories}></ChartContainer>
         </Charts>
       </div>
     </DashBoardContainer>
@@ -133,6 +180,16 @@ const DashBoardContainer = styled.div`
         sans-serif;
       font-size: 22px;
       text-transform: capitalize;
+    }
+
+    @media screen and (max-width: 900px) {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(3, 1fr);
+      place-items: center;
+    }
+
+    @media screen and (max-width: 400px) {
+      padding: 0;
     }
   }
 `;
@@ -167,6 +224,7 @@ const Charts = styled.div`
       return theme.color.primaryContainer.text;
     }} !important;
     width: 100%;
+    height: 60px;
     padding: 10px;
     border-radius: 5px;
     margin: 20px auto;
@@ -204,5 +262,8 @@ const Charts = styled.div`
     background: ${({ theme }) => {
       return theme.color.primaryContainer.Background;
     }};
+  }
+  .select-type {
+    margin: 5px 0;
   }
 `;

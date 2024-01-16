@@ -3,19 +3,33 @@ import { HiDotsVertical } from "react-icons/hi";
 import { MdDriveFileRenameOutline, MdOutlineAnalytics } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
-import CategoryDelete from "../PopupModels/CategoryDelete";
 import CategoryEdit from "../PopupModels/CategoryEdit";
+import CategoryDelete from "../PopupModels/CategoryDelete";
 export default function CategoryCard({ categoryinfo }) {
   const [showDeleteModel, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
   return (
     <div>
-      {showDeleteModel && <CategoryDelete catinfo={categoryinfo} />}
-      {showEditModal && <CategoryEdit catinfo={categoryinfo} />}
+      {showDeleteModel && (
+        <CategoryDelete
+          catinfo={categoryinfo}
+          setShowDeleteModal={setShowDeleteModal}
+        />
+      )}
+      {showEditModal && (
+        <CategoryEdit
+          catinfo={categoryinfo}
+          setShowEditModal={setShowEditModal}
+        />
+      )}
       <div className="category-details">
         <img src="/Profile.png" alt="" />
-        <p>{categoryinfo.name}</p>
+        <p>
+          {categoryinfo.name.length > 10
+            ? `${categoryinfo.name.slice(0, 9)}...`
+            : categoryinfo.name}
+        </p>
         <div className="cat-menu">
           <HiDotsVertical className="icon" />
           <div className="menu-details">

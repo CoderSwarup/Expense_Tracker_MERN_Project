@@ -4,44 +4,40 @@ import styled from "styled-components";
 import useModal from "../../Hooks/useModal";
 import useToast from "../Common/ToastContainerComponent";
 
-export default function CategoryEdit({ catinfo, setShowEditModal }) {
+export default function TransactionEditModal({ transactionInfo, setShow }) {
   const { showToast } = useToast();
   const { isOpen, openModal, closeModal } = useModal();
   const [name, setName] = useState("");
-  const [image, setImage] = useState(catinfo.image);
-  const [originalName] = useState(catinfo.name);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [transactionType, setTransactionType] = useState("");
+  const [price, setPrice] = useState(0);
+  const [date, setDate] = useState("");
+  const [originalName] = useState(transactionInfo.name);
 
   useEffect(() => {
     openModal();
   }, []);
 
   useEffect(() => {
-    setName(catinfo.name);
-  }, [catinfo]);
-
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-
-    if (selectedImage) {
-      setImage(selectedImage);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(selectedImage);
-    } else {
-      setImage(null);
-      setImagePreview(null);
-    }
-  };
+    setName(transactionInfo.name);
+    setPrice(transactionInfo.amount);
+    setDate(transactionInfo.createddate.split("T")[0]);
+    setTransactionType(transactionInfo.category.type === "Income" ? "0" : "1");
+  }, [transactionInfo]);
 
   const handleEdit = () => {
+    // Perform validation and editing logic here
+    // For simplicity, let's assume validation passes
+    // You should add your own validation logic
+
     if (name === originalName) {
       return showToast("Name is the same as the old name", "error");
     }
-    closeModal();
-    setShowEditModal(false);
+
+    console.log(transactionType);
+
+    // Close the modal after editing
+    // closeModal();
+    // setShow(false);
   };
 
   return createPortal(
@@ -49,9 +45,9 @@ export default function CategoryEdit({ catinfo, setShowEditModal }) {
       {isOpen && (
         <ModalWrapper>
           <ModalContent>
-            <h1>Edit Category</h1>
+            <h1>Edit Transaction</h1>
             <InputLabel>
-              Category Name:{" "}
+              Transaction Name:{" "}
               <InputField
                 type="text"
                 value={name}
@@ -59,21 +55,38 @@ export default function CategoryEdit({ catinfo, setShowEditModal }) {
               />
             </InputLabel>
             <InputLabel>
-              Category Image:{" "}
+              Transaction Type:{" "}
+              <select
+                value={transactionType}
+                onChange={(e) => {
+                  setTransactionType(e.target.value);
+                }}
+              >
+                <option value="0">Income</option>
+                <option value="1">Expense</option>
+              </select>
+            </InputLabel>
+            <InputLabel>
+              Price:{" "}
               <InputField
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
               />
-              {imagePreview && (
-                <ImagePreview src={imagePreview} alt="Category Preview" />
-              )}
+            </InputLabel>
+            <InputLabel>
+              Date:{" "}
+              <InputField
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
             </InputLabel>
             <ButtonWrapper>
               <CancelButton
                 onClick={() => {
                   closeModal();
-                  setShowEditModal(false);
+                  setShow(false);
                 }}
               >
                 Cancel
@@ -156,12 +169,4 @@ const EditButton = styled.button`
   cursor: pointer;
   opacity: ${(props) => (props.disabled ? "0.5" : "1")};
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
-`;
-
-const ImagePreview = styled.img`
-  margin-top: 10px;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  align-self: center;
 `;

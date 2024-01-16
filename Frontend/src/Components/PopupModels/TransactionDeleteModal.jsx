@@ -3,7 +3,10 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import useModal from "../../Hooks/useModal";
 
-export default function CategoryDelete({ catinfo, setShowDeleteModal }) {
+export default function TransactionDeleteModal({
+  transactoninfo,
+  setShowDeleteModal,
+}) {
   const { isOpen, openModal, closeModal } = useModal();
   const [inputValue, setInputValue] = useState("");
   const [isInputValid, setIsInputValid] = useState(true);
@@ -19,7 +22,7 @@ export default function CategoryDelete({ catinfo, setShowDeleteModal }) {
 
   const handleDelete = () => {
     // Validate the category name
-    if (inputValue.toLowerCase() === catinfo.name.toLowerCase()) {
+    if (inputValue.toLowerCase() === transactoninfo.name.toLowerCase()) {
       // Close the modal after successful deletion
       closeModal();
       setShowDeleteModal(false);
@@ -34,12 +37,13 @@ export default function CategoryDelete({ catinfo, setShowDeleteModal }) {
       {isOpen && (
         <ModalWrapper>
           <ModalContent>
-            <h1>Delete Category</h1>
+            <h1>Delete Trancation</h1>
             <p>
-              Are you sure you want to delete category <b>{catinfo.name}</b>?
+              Are you sure you want to delete Transaction{" "}
+              <b>{transactoninfo.name}</b>?
             </p>
             <InputLabel>
-              Category Name:{" "}
+              Transaction Name:{" "}
               <InputField
                 type="text"
                 value={inputValue}
