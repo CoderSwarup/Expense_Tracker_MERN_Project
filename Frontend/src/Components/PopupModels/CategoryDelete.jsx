@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import useModal from "../../Hooks/useModal";
+import { useDispatch, useSelector } from "react-redux";
+import useToast from "../Common/ToastContainerComponent";
+import { DeleteCategory } from "../../Store/Actions/CategoryActions";
 
 export default function CategoryDelete({ catinfo, setShowDeleteModal }) {
+  const { incomeexpenseslist } = useSelector((state) => state.incomeexpense);
+  const { showToast } = useToast();
+  const dispatch = useDispatch();
   const { isOpen, openModal, closeModal } = useModal();
   const [inputValue, setInputValue] = useState("");
   const [isInputValid, setIsInputValid] = useState(true);
-
   useEffect(() => {
     openModal();
   }, []);
@@ -17,12 +22,29 @@ export default function CategoryDelete({ catinfo, setShowDeleteModal }) {
     setIsInputValid(true);
   };
 
-  const handleDelete = () => {
+  const CloseModals = () => {
+    closeModal();
+    setShowDeleteModal(false);
+  };
+
+  const handleDelete = async () => {
     // Validate the category name
-    if (inputValue.toLowerCase() === catinfo.name.toLowerCase()) {
-      // Close the modal after successful deletion
-      closeModal();
-      setShowDeleteModal(false);
+    const AvailableTranaction = incomeexpenseslist.filter((list) => {
+      return (
+        list.category.name === catinfo.name &&
+        list.category.type === catinfo.type
+      );
+    });
+
+    if (AvailableTranaction.length !== 0) {
+      return showToast(
+        `This category has ${AvailableTranaction.length}  transactions associated with it Please Delete Or Change There Categories`,
+        "info"
+      );
+    }
+
+    if (inputValue === catinfo.name) {
+      await DeleteCategory(catinfo._id, dispatch, closeModal);
     } else {
       // Show an error message if the category name is incorrect
       setIsInputValid(false);

@@ -16,19 +16,23 @@ exports.createIncomeExpenseController = async (req, res) => {
     let date;
 
     if (!name) {
-      SendErrorResponse(res, 400, "Please enter the name of the expense");
+      return SendErrorResponse(
+        res,
+        400,
+        "Please enter the name of the expense"
+      );
     }
 
     if (amount < 0) {
-      SendErrorResponse(res, 400, "Amount cannot be negative");
+      return SendErrorResponse(res, 400, "Amount cannot be negative");
     }
 
     if (!desc) {
-      SendErrorResponse(res, 400, "Description is required");
+      return SendErrorResponse(res, 400, "Description is required");
     }
 
     if (!category) {
-      SendErrorResponse(res, 400, "Category is required");
+      return SendErrorResponse(res, 400, "Category is required");
     }
 
     if (!createddate) {
@@ -37,10 +41,12 @@ exports.createIncomeExpenseController = async (req, res) => {
       const validDateFormat = /^\d{4}-\d{2}-\d{2}$/;
 
       if (!validDateFormat.test(createddate)) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid date format in query parameters",
-        });
+        // return res.status(400).json({
+        //   success: false,
+        //   message: "Invalid date format in query parameters",
+        // });
+        SendErrorResponse(res, 400, "Invalid date format in query parameters");
+        return;
       }
       date = createddate;
     }
@@ -63,13 +69,12 @@ exports.createIncomeExpenseController = async (req, res) => {
       mesage: "Expense Created Sussfully",
     });
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     if (error instanceof Error) {
       return SendErrorResponse(res, 500, error.message);
     }
-    return res
-      .status(500)
-      .json({ error: "An error occurred while creating the expense." });
+
+    return SendErrorResponse(res, 500, "Error");
   }
 };
 
@@ -83,23 +88,27 @@ exports.UpdateIncomeExpenseController = async (req, res) => {
     let date;
 
     if (!name) {
-      SendErrorResponse(res, 400, "Please enter the name of the expense");
+      return SendErrorResponse(
+        res,
+        400,
+        "Please enter the name of the expense"
+      );
     }
 
     if (amount < 0) {
-      SendErrorResponse(res, 400, "Amount cannot be negative");
+      return SendErrorResponse(res, 400, "Amount cannot be negative");
     }
 
     if (!desc) {
-      SendErrorResponse(res, 400, "Description is required");
+      return SendErrorResponse(res, 400, "Description is required");
     }
 
     if (!category) {
-      SendErrorResponse(res, 400, "Category is required");
+      return SendErrorResponse(res, 400, "Category is required");
     }
 
     if (!createduser) {
-      SendErrorResponse(res, 401, "Unauthorized");
+      return SendErrorResponse(res, 401, "Unauthorized");
     }
 
     await CategoryExpenseService.UpdateExpenseAndupdateCategory(
@@ -121,7 +130,11 @@ exports.UpdateIncomeExpenseController = async (req, res) => {
       return SendErrorResponse(res, 501, error.message);
     }
     // Handle unexpected errors and return an error response
-    SendErrorResponse(res, 500, "Something went Wrong in Update Expense");
+    return SendErrorResponse(
+      res,
+      500,
+      "Something went Wrong in Update Expense"
+    );
   }
 };
 

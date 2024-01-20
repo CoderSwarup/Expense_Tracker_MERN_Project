@@ -13,7 +13,11 @@ exports.CreateNewCategoryController = async (req, res) => {
       });
     }
 
-    const CategoryAlredyExists = await categoryModel.findOne({ name });
+    const CategoryAlredyExists = await categoryModel.findOne({
+      name: name,
+      createduser: createduser,
+      type: type,
+    });
     if (CategoryAlredyExists) {
       return res.status(300).send({
         success: false,
@@ -32,7 +36,7 @@ exports.CreateNewCategoryController = async (req, res) => {
     //   },
     // ];
 
-    await categoryModel({ name, createduser }).save();
+    await categoryModel({ name, createduser, type }).save();
     return res.status(200).send({
       success: true,
       message: "Category Created Successfully",
@@ -51,7 +55,7 @@ exports.CreateNewCategoryController = async (req, res) => {
 exports.UpdateCategoryController = async (req, res) => {
   try {
     const { _id } = req.params;
-    const { newCategoryName } = req.body;
+    const { newCategoryName, type } = req.body;
 
     if (!newCategoryName) {
       return res.status(300).send({
@@ -68,14 +72,14 @@ exports.UpdateCategoryController = async (req, res) => {
       });
     }
 
-    if (newCategoryName === FindCategory.name) {
+    if (newCategoryName === FindCategory.name && type === FindCategory.type) {
       return res.status(300).send({
         success: false,
-        message: "Category Name is Same As Privious",
+        message: "Category is Same Ad Privious",
       });
     }
 
-    await categoryModel.updateOne({ name: newCategoryName });
+    await categoryModel.updateOne({ name: newCategoryName, type });
 
     return res.status(200).send({
       success: true,

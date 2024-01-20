@@ -1,26 +1,32 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const BACKENDURL = "http://localhost:3000";
+const BACKENDURL = "http://localhost:3000/api/v1";
 
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
       // Authentication
-      "/api/v1/auth/register": BACKENDURL,
-      "/api/v1/auth/login": BACKENDURL,
-      "/api/v1/auth/logout": BACKENDURL,
-      "/api/v1/auth/forgotpassword": BACKENDURL,
-      "/api/v1/auth/myprofile": BACKENDURL,
-      "/api/v1/auth/verify/user": BACKENDURL,
+      "/auth/register": BACKENDURL,
+      "/auth/login": BACKENDURL,
+      "/auth/logout": BACKENDURL,
+      "/auth/forgotpassword": BACKENDURL,
+      "/auth/myprofile": BACKENDURL,
+      "/auth/verify/user": BACKENDURL,
 
       //income Expense
-      "/api/v1/incomeexpense/findall/incomeexpense": BACKENDURL,
+      "/incomeexpense/findall/incomeexpense": BACKENDURL,
+      "/incomeexpense/create/incomeexpesne": BACKENDURL,
+      "/incomeexpense/update/expense": BACKENDURL,
+      "/incomeexpense/delete/expense": BACKENDURL,
 
       //Category
 
-      "/api/v1/category/getall/category": BACKENDURL,
+      "/category/getall/category": BACKENDURL,
+      "/category/create/category": BACKENDURL,
+      "/category/delete/category": BACKENDURL,
+      "/category/update/category": BACKENDURL,
     },
   },
 });

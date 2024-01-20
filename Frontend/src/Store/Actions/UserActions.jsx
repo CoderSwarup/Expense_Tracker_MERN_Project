@@ -8,11 +8,7 @@ export const RegisterUser = createAsyncThunk(
   "user/register",
   async (userData) => {
     try {
-      const { data } = await axios.post(
-        "/api/v1/auth/register",
-        userData,
-        config
-      );
+      const { data } = await axios.post("/auth/register", userData, config);
       return data;
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -26,7 +22,7 @@ export const LoginUser = createAsyncThunk(
   async ({ email, password }) => {
     try {
       const { data } = await axios.post(
-        "/api/v1/auth/login",
+        "/auth/login",
         {
           email,
           password,
@@ -44,7 +40,7 @@ export const LoginUser = createAsyncThunk(
 //Logout User Actions
 export const LogoutUser = createAsyncThunk("user/logout", async () => {
   try {
-    const { data } = await axios.get("/api/v1/auth/logout", config);
+    const { data } = await axios.get("/auth/logout", config);
     return data;
   } catch (error) {
     throw new Error(error.response.data.message);
@@ -58,7 +54,7 @@ export const ForgotPassword = createAsyncThunk(
   async ({ email }) => {
     try {
       const { data } = await axios.post(
-        "/api/v1/auth/forgotpassword",
+        "/auth/forgotpassword",
         {
           email,
         },
@@ -74,7 +70,7 @@ export const ForgotPassword = createAsyncThunk(
 //Get User Profile
 export const GetUser = createAsyncThunk("user/profile", async () => {
   try {
-    const { data } = await axios.get("/api/v1/auth/myprofile", config);
+    const { data } = await axios.get("/auth/myprofile", config);
     return data;
   } catch (error) {
     throw new Error(error.response.data.message);

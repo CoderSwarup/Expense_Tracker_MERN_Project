@@ -3,41 +3,83 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import useModal from "../../Hooks/useModal";
 import useToast from "../Common/ToastContainerComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { UpdateTransaction } from "../../Store/Actions/IncomeExpenseActions";
 
 export default function TransactionEditModal({ transactionInfo, setShow }) {
+  const dispatch = useDispatch();
+  const { categoryList } = useSelector((state) => state.category);
   const { showToast } = useToast();
   const { isOpen, openModal, closeModal } = useModal();
   const [name, setName] = useState("");
   const [transactionType, setTransactionType] = useState("");
   const [price, setPrice] = useState(0);
   const [date, setDate] = useState("");
-  const [originalName] = useState(transactionInfo.name);
+  const [isDisable, setIsDisable] = useState(false);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(
+    transactionInfo.category.name
+  );
+
+  const [desc, setDesc] = useState("");
+
+  const CloseAllModels = () => {
+    closeModal();
+    setShow(false);
+  };
 
   useEffect(() => {
     openModal();
   }, []);
 
   useEffect(() => {
+    setFilteredCategories(
+      categoryList.filter((category) => category.type === transactionType)
+    );
+  }, [transactionType, categoryList]);
+
+  useEffect(() => {
     setName(transactionInfo.name);
     setPrice(transactionInfo.amount);
     setDate(transactionInfo.createddate.split("T")[0]);
-    setTransactionType(transactionInfo.category.type === "Income" ? "0" : "1");
+    setTransactionType(
+      transactionInfo.category.type === "Income" ? "Income" : "Expense"
+    );
+    setDesc(transactionInfo.desc);
   }, [transactionInfo]);
 
-  const handleEdit = () => {
-    // Perform validation and editing logic here
-    // For simplicity, let's assume validation passes
-    // You should add your own validation logic
+  const handleEdit = async () => {
+    const selectedCategoryObject = categoryList.find(
+      (category) => category.name === selectedCategory
+    );
 
-    if (name === originalName) {
-      return showToast("Name is the same as the old name", "error");
+    const OldDate = transactionInfo.createddate.split("T")[0];
+    if (
+      transactionInfo.name === name &&
+      transactionInfo.amount === price &&
+      OldDate === date &&
+      selectedCategoryObject._id === transactionInfo.category._id &&
+      transactionInfo.desc === desc
+    ) {
+      return showToast("No Any Data Change", "info");
     }
+    setIsDisable(true);
+    const data = {
+      name,
+      createddate: date,
+      amount: price,
+      desc,
+      category: selectedCategoryObject._id,
+    };
 
-    console.log(transactionType);
+    await UpdateTransaction(
+      transactionInfo._id,
+      data,
+      dispatch,
+      CloseAllModels
+    );
 
-    // Close the modal after editing
-    // closeModal();
-    // setShow(false);
+    setIsDisable(false);
   };
 
   return createPortal(
@@ -55,15 +97,62 @@ export default function TransactionEditModal({ transactionInfo, setShow }) {
               />
             </InputLabel>
             <InputLabel>
+              Transaction Description:
+              <textarea
+                style={{
+                  width: "100%",
+                  height: "50px",
+                  resize: "none",
+                  margin: "5px 0",
+                  padding: "5px",
+                }}
+                type="textarea"
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
+              />
+            </InputLabel>
+            <InputLabel>
               Transaction Type:{" "}
               <select
+                className="StyledSelect"
                 value={transactionType}
                 onChange={(e) => {
                   setTransactionType(e.target.value);
                 }}
               >
-                <option value="0">Income</option>
-                <option value="1">Expense</option>
+                <option className="StyledOption" value="Income">
+                  Income
+                </option>
+                <option className="StyledOption" value="Expense">
+                  Expense
+                </option>
+              </select>
+            </InputLabel>
+
+            <InputLabel>
+              Category:
+              <select
+                className="StyledSelect"
+                value={selectedCategory}
+                onChange={(e) => {
+                  // console.log(e.target.value);
+                  setSelectedCategory(e.target.value);
+                }}
+              >
+                <option className="StyledOption" value="">
+                  Select a category
+                </option>
+                {filteredCategories.map((category) => (
+                  <option
+                    className="StyledOption"
+                    key={category._id}
+                    value={category.name}
+                  >
+                    {category.name.length > 10
+                      ? `${category.name.slice(0, 9)}...`
+                      : category.name}
+                  </option>
+                ))}
               </select>
             </InputLabel>
             <InputLabel>
@@ -83,15 +172,12 @@ export default function TransactionEditModal({ transactionInfo, setShow }) {
               />
             </InputLabel>
             <ButtonWrapper>
-              <CancelButton
-                onClick={() => {
-                  closeModal();
-                  setShow(false);
-                }}
-              >
+              <CancelButton disabled={isDisable} onClick={CloseAllModels}>
                 Cancel
               </CancelButton>
-              <EditButton onClick={handleEdit}>Edit</EditButton>
+              <EditButton disabled={isDisable} onClick={handleEdit}>
+                Edit
+              </EditButton>
             </ButtonWrapper>
           </ModalContent>
         </ModalWrapper>

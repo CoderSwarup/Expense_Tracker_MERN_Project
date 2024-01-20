@@ -2,15 +2,18 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import useModal from "../../Hooks/useModal";
+import { DeleteTranSaction } from "../../Store/Actions/IncomeExpenseActions";
+import { useDispatch } from "react-redux";
 
 export default function TransactionDeleteModal({
   transactoninfo,
   setShowDeleteModal,
 }) {
+  const dispatch = useDispatch();
   const { isOpen, openModal, closeModal } = useModal();
   const [inputValue, setInputValue] = useState("");
   const [isInputValid, setIsInputValid] = useState(true);
-
+  const [isDisable, setIsDisable] = useState(false);
   useEffect(() => {
     openModal();
   }, []);
@@ -20,12 +23,18 @@ export default function TransactionDeleteModal({
     setIsInputValid(true);
   };
 
-  const handleDelete = () => {
+  const CloseModals = () => {
+    closeModal();
+    setShowDeleteModal(false);
+  };
+
+  const handleDelete = async () => {
     // Validate the category name
     if (inputValue.toLowerCase() === transactoninfo.name.toLowerCase()) {
-      // Close the modal after successful deletion
-      closeModal();
-      setShowDeleteModal(false);
+      // Close the modal after successful deletion\
+      setIsDisable(true);
+      await DeleteTranSaction(transactoninfo._id, dispatch, CloseModals);
+      setIsDisable(false);
     } else {
       // Show an error message if the category name is incorrect
       setIsInputValid(false);
@@ -54,15 +63,12 @@ export default function TransactionDeleteModal({
               <ErrorMessage>Incorrect category name</ErrorMessage>
             )}
             <ButtonWrapper>
-              <CancelButton
-                onClick={() => {
-                  closeModal();
-                  setShowDeleteModal(false);
-                }}
-              >
+              <CancelButton disabled={isDisable} onClick={CloseModals}>
                 Cancel
               </CancelButton>
-              <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
+              <DeleteButton disabled={isDisable} onClick={handleDelete}>
+                Delete
+              </DeleteButton>
             </ButtonWrapper>
           </ModalContent>
         </ModalWrapper>

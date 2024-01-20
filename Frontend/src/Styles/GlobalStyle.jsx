@@ -95,7 +95,7 @@ body{
   width: 100%;
   padding: 8px;
   font-size: 16px;
-  border: 1px solid ${({ theme }) => theme.color.primaryText};
+  /* border: 1px solid ${({ theme }) => theme.color.primaryText}; */
   border-radius: 4px;
   color: ${({ theme }) => theme.color.textColor};
   background-color: ${({ theme }) => theme.color.primaryContainer.Background};
@@ -105,6 +105,7 @@ body{
   background-color: ${({ theme }) => theme.color.primaryContainer.Background};
   color: ${({ theme }) => theme.color.textColor};
 }
+
 
 `;
 

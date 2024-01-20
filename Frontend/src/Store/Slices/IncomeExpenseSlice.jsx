@@ -10,6 +10,7 @@ const IncomeExpenseSlice = createSlice({
     error: null,
   },
   extraReducers: (builder) => {
+    // Get Transaction
     builder
       .addCase(GetIncomesExpenses.pending, (state, action) => {
         state.loading = true;
@@ -23,6 +24,8 @@ const IncomeExpenseSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       });
+
+    // Create Transaction
   },
 });
 

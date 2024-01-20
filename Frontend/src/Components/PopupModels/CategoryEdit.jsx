@@ -3,15 +3,21 @@ import { createPortal } from "react-dom";
 import styled from "styled-components";
 import useModal from "../../Hooks/useModal";
 import useToast from "../Common/ToastContainerComponent";
+import { useDispatch } from "react-redux";
+import { UpdateCategory } from "../../Store/Actions/CategoryActions";
 
 export default function CategoryEdit({ catinfo, setShowEditModal }) {
   const { showToast } = useToast();
+  const distpatch = useDispatch();
   const { isOpen, openModal, closeModal } = useModal();
   const [name, setName] = useState("");
-  const [image, setImage] = useState(catinfo.image);
   const [originalName] = useState(catinfo.name);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [categoryType, setCategoryType] = useState(catinfo.type);
 
+  const CloseModals = () => {
+    closeModal();
+    setShowEditModal(false);
+  };
   useEffect(() => {
     openModal();
   }, []);
@@ -20,28 +26,17 @@ export default function CategoryEdit({ catinfo, setShowEditModal }) {
     setName(catinfo.name);
   }, [catinfo]);
 
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-
-    if (selectedImage) {
-      setImage(selectedImage);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(selectedImage);
-    } else {
-      setImage(null);
-      setImagePreview(null);
+  const handleEdit = async () => {
+    if (name === originalName && categoryType === catinfo.type) {
+      return showToast("Nothing Is Change", "warn");
     }
-  };
 
-  const handleEdit = () => {
-    if (name === originalName) {
-      return showToast("Name is the same as the old name", "error");
-    }
-    closeModal();
-    setShowEditModal(false);
+    const Data = {
+      newCategoryName: name,
+      type: categoryType,
+    };
+
+    await UpdateCategory(catinfo._id, Data, distpatch, CloseModals);
   };
 
   return createPortal(
@@ -59,15 +54,20 @@ export default function CategoryEdit({ catinfo, setShowEditModal }) {
               />
             </InputLabel>
             <InputLabel>
-              Category Image:{" "}
-              <InputField
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-              {imagePreview && (
-                <ImagePreview src={imagePreview} alt="Category Preview" />
-              )}
+              Category Type:
+              <select
+                id="cattype"
+                value={categoryType}
+                onChange={(e) => setCategoryType(e.target.value)}
+                className="StyledSelect"
+              >
+                <option className="StyledOption" value="Income">
+                  Income
+                </option>
+                <option className="StyledOption" value="Expense">
+                  Expense
+                </option>
+              </select>
             </InputLabel>
             <ButtonWrapper>
               <CancelButton

@@ -20,11 +20,11 @@ export default function DailyExpenses() {
     const date = new Date();
     const year = date.getFullYear();
     const todaysDate = date.getDate();
-    const month = date.getMonth();
-    const CompleteDate = String(year + "-" + month + "-" + todaysDate);
-    return CompleteDate;
+    const month = date.getMonth() + 1;
+    return `${year}-${("" + month).padStart(2, "0")}-${todaysDate}`;
   };
   const date = CurrentDate();
+  console.log(date);
 
   useEffect(() => {
     dispatch(GetIncomesExpenses());
@@ -42,12 +42,13 @@ export default function DailyExpenses() {
   };
 
   useEffect(() => {
-    const newlist = incomeexpenseslist?.filter((data) => {
+    const newlist = incomeexpenseslist.filter((data) => {
       return data.createddate.split("T")[0] === date;
     });
 
     setExpenseValue(FilterTransaction(newlist, "Expense"));
     setIncomeValue(FilterTransaction(newlist, "Income"));
+    console.log(newlist);
     setDisplayList(newlist);
   }, [incomeexpenseslist]);
   return (
@@ -80,7 +81,7 @@ export default function DailyExpenses() {
             </div>
           </div>
           <div>
-            <h2>Todays Spend </h2>
+            <h2>Todays Transactions </h2>
             <div className="spend-category">
               {displayList.map((incomeexpense, i) => {
                 return (
@@ -106,6 +107,7 @@ const Wrapper = styled.div`
     return theme.color.primaryContainer.text;
   }} !important;
   .daily-container {
+    margin: 15px 0;
     display: grid;
     grid-template-columns: 1fr 2fr;
     justify-content: center;
@@ -160,12 +162,9 @@ const Wrapper = styled.div`
   }
 
   .spend-category {
-    height: 80vh;
-    padding: 10px;
+    max-height: 85vh;
     overflow-y: scroll;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    padding: 0 5px;
 
     &::-webkit-scrollbar {
       display: none;

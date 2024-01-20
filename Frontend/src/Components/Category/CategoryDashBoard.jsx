@@ -6,11 +6,16 @@ import { MdDelete } from "react-icons/md";
 import CategoryCard from "../CardComponent/CategoryCard";
 import DashBoardHeading from "../DashBord/DashBoardHeading";
 import { useDispatch, useSelector } from "react-redux";
-import { GetCategoryList } from "../../Store/Actions/CategoryActions";
+import {
+  CreateNewCategory,
+  GetCategoryList,
+} from "../../Store/Actions/CategoryActions";
 import { FilterCategory } from "../../utils/Commonfunctions";
+import useToast from "../Common/ToastContainerComponent";
 
 export default function CategoryDashBoard({ device = "desktop" }) {
   const Dispatch = useDispatch();
+  const { showToast } = useToast();
   const { categoryList, isLoading, error, message } = useSelector(
     (state) => state.category
   );
@@ -18,6 +23,8 @@ export default function CategoryDashBoard({ device = "desktop" }) {
   const [incomeCategory, setincomeCategory] = useState([]);
   const [expenseCategory, setexpenseCategory] = useState([]);
 
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryType, setCategoryType] = useState("Income");
   useEffect(() => {
     Dispatch(GetCategoryList());
   }, []);
@@ -29,8 +36,21 @@ export default function CategoryDashBoard({ device = "desktop" }) {
     }
   }, [categoryList]);
 
+  const OnSubmitHandler = async (e) => {
+    e.preventDefault();
+    if (!categoryName || categoryName.length < 4) {
+      return showToast("Minimum Category Name Length is 4", "info");
+    }
+    const Data = {
+      name: categoryName,
+      type: categoryType,
+    };
+
+    await CreateNewCategory(Data, Dispatch);
+  };
+
   return (
-    <>
+    <div className="MainContainer">
       {device === "desktop" && (
         <>
           <DashBoardHeading />
@@ -48,7 +68,57 @@ export default function CategoryDashBoard({ device = "desktop" }) {
           </h1>
         </>
       )}
-
+      {device === "desktop" && (
+        <AddCategoryWrapper>
+          <div className="create-Category-Form">
+            <form onSubmit={OnSubmitHandler}>
+              <h2 className="recen">Category Name</h2>
+              <div className="category-text">
+                <MdDriveFileRenameOutline className="form-icon" />
+                <input
+                  value={categoryName}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    setCategoryName(e.target.value);
+                  }}
+                  id="catname"
+                  type="text"
+                  placeholder="Enter category name"
+                />
+              </div>
+              <h2 className="recen">Category Type</h2>
+              <div className="category-text">
+                <select
+                  value={categoryType}
+                  onChange={(e) => setCategoryType(e.target.value)}
+                  id="cattype"
+                  className="StyledSelect"
+                >
+                  <option className="StyledOption" value="Income">
+                    Income
+                  </option>
+                  <option className="StyledOption" value="Expense">
+                    Expense
+                  </option>
+                </select>
+              </div>
+              <button>Add Category</button>
+            </form>
+          </div>
+          <div className="recent-category-list">
+            <h2 className="recen">Recent Categories</h2>
+            <div className="catContainer cat-list">
+              {categoryList.length !== 0 ? (
+                categoryList.slice(0, 10)?.map((ele, i) => {
+                  return <CategoryCard key={i} categoryinfo={ele} />;
+                })
+              ) : (
+                <h1 style={{ textAlign: "center" }}>Nothing Found </h1>
+              )}
+            </div>
+          </div>
+        </AddCategoryWrapper>
+      )}
       <CategoryWrapper>
         <div
           className={`CategoryContainer ${
@@ -84,51 +154,21 @@ export default function CategoryDashBoard({ device = "desktop" }) {
                 )}
               </div>
             </div>
-
-            {device === "desktop" && (
-              <div className="create-category">
-                <h3>Create Category</h3>
-                <div className="addcategoryContainer">
-                  <div className="create-Category-Form">
-                    <h2>Create Category</h2>
-                    <form action="">
-                      <div className="category-text">
-                        <MdDriveFileRenameOutline className="form-icon" />
-                        <input type="text" placeholder="Enter category name" />
-                      </div>
-                      <button type="submit">Add Category</button>
-                    </form>
-                  </div>
-                  <div className="recent-category-list">
-                    <h2 className="recen">Recent Categories</h2>
-                    <div className="catContainer cat-list">
-                      {categoryList.length !== 0 ? (
-                        categoryList?.map((ele, i) => {
-                          return <CategoryCard key={i} categoryinfo={ele} />;
-                        })
-                      ) : (
-                        <h1 style={{ textAlign: "center" }}>Nothing Found </h1>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </CategoryWrapper>
-    </>
+    </div>
   );
 }
 
 const CategoryWrapper = styled.div`
   /* background: #202329; */
-  margin: 20px 0;
+
+  margin: 20px auto;
   border-radius: 20px;
-  padding: 10px;
-  color: ${({ theme }) => {
-    return theme.color.primaryContainer.text;
-  }} !important;
+  @media screen and (max-width: 850px) {
+    width: 96vw;
+  }
 
   h3 {
     width: 200px;
@@ -147,9 +187,6 @@ const CategoryWrapper = styled.div`
     border-bottom: 2px solid red;
   }
 
-  .recen {
-    border-bottom: 2px solid yellow;
-  }
   @media screen and (max-width: 530px) {
     h3 {
       width: 150px;
@@ -177,70 +214,42 @@ const CategoryWrapper = styled.div`
         return theme.color.primaryContainer.text;
       }};
   }
-  img {
-    width: 40px;
-  }
-
-  .catContainer {
+  .CategoryContainer {
     overflow-y: scroll;
-    padding: 10px 0;
-    height: 100%;
-
+    overflow-x: hidden;
     &::-webkit-scrollbar {
       display: none;
     }
   }
-
-  .category-details {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
-    gap: 5px;
-
-    .icon {
-      font-size: 20px;
-      cursor: pointer;
-    }
-    p {
-      width: 80%;
-      font-size: 16px;
-      font-weight: 700;
-    }
-    @media screen and (max-width: 400px) {
-      p,
-      .icon {
-        font-size: 10px;
-      }
-    }
-  }
   /* Mobile Container */
-  .CategoryContainer.mobile-CategoryContainer {
-    /* overflow: hidden; */
+
+  .mobile-CategoryContainer {
     width: 500px;
+    margin: auto;
     height: 85vh;
-    padding: 20px;
+    padding: 5px;
+    border-radius: 20px;
+    color: ${({ theme }) => {
+      return theme.color.primaryContainer.text;
+    }} !important;
     background: ${({ theme }) => {
       return theme.color.primaryContainer.Background;
     }};
-    border-radius: 20px;
+
     h2 {
       text-transform: capitalize;
     }
 
     @media screen and (max-width: 900px) {
-      width: 90vw;
+      width: 100%;
     }
-  }
-  .mobile-CategoryContainer {
     .category {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: top;
       height: 100%;
       gap: 30px;
-      padding: 10px 0;
+      padding: 5px 0;
       margin-bottom: 20px;
     }
 
@@ -250,32 +259,28 @@ const CategoryWrapper = styled.div`
       /* width: 500px !important; */
       height: 50%;
     }
-
-    /* .income-category {
-    margin: 10px 0;
-    } */
   }
 
   /* Desktop Container */
 
-  .CategoryContainer.desktop-CategoryContainer {
-    overflow-x: hidden;
-    width: 100%;
+  .desktop-CategoryContainer {
+    width: 96vw;
+    margin: auto;
     height: 85vh;
-    padding: 20px;
+    padding: 5px;
+    color: ${({ theme }) => {
+      return theme.color.primaryContainer.text;
+    }} !important;
     background: ${({ theme }) => {
       return theme.color.primaryContainer.Background;
     }};
-    border-radius: 20px;
+
     h2 {
       text-transform: capitalize;
     }
-  }
-
-  .desktop-CategoryContainer {
     .category {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       height: 100%;
       gap: 30px;
       padding: 10px 0;
@@ -285,7 +290,7 @@ const CategoryWrapper = styled.div`
     .income-category,
     .expense-category,
     .create-category {
-      height: 55%;
+      height: 100%;
     }
 
     /* .income-category {
@@ -296,118 +301,123 @@ const CategoryWrapper = styled.div`
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: 1dr 1fr;
       }
-
-      .income-category,
-      .expense-category,
-      .create-category {
-        height: 100px;
-      }
     }
   }
+`;
 
-  .addcategoryContainer {
-    margin: 20px 0;
-    height: 95%;
+const AddCategoryWrapper = styled.div`
+  width: 96vw;
+  padding: 0 10px;
+  margin: 40px auto;
+  display: grid;
+  grid-template-columns: 1.4fr 2fr;
+  gap: 10px;
+  color: ${({ theme }) => {
+    return theme.color.primaryContainer.text;
+  }} !important;
+  background: ${({ theme }) => {
+    return theme.color.primaryContainer.Background;
+  }};
 
-    form {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      margin: 8px;
-      gap: 10px;
-
-      .category-text {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        font-size: 20px;
-      }
-
-      .form-icon {
-        left: 0;
-        top: 5px;
-        color: ${({ theme }) => {
-          return theme.color.primaryContainer.text;
-        }};
-        position: absolute;
-      }
-
-      input {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        outline: none;
-        border: none;
-        padding: 7px;
-        padding-left: 28px;
-        border-radius: 5px;
-      }
-
-      button {
-        margin: 5px 0;
-        padding: 5px 10px;
-        border-radius: 10px;
-        border: none;
-        text-transform: uppercase;
-        font-weight: 600;
-        background: #fff;
-        color: #000;
-      }
-    }
-
-    .cat-list {
-      height: 380px !important;
-      overflow-y: scroll;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
+  @media screen and (max-width: 850px) {
+    grid-template-columns: 1fr 1fr;
   }
-  .cat-menu {
-    position: relative;
+  @media screen and (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
 
-    .menu-details {
-      position: absolute;
-      bottom: -90px;
-      right: 0;
-      width: 140px;
-      color: #000000;
-      background: #fff;
-      padding: 3px;
-
-      display: none;
-      .menu-data {
-        width: 100%;
-        display: flex;
-        margin: 5px 0;
-        justify-content: space-between;
-        align-items: center;
-        transition: all 0.3s ease;
-        padding: 2px;
-        &:hover {
-          background: #0d0d0d;
-          color: #fff;
-        }
-      }
-
-      font-size: 15px;
-      cursor: pointer;
-    }
-
-    &:hover .menu-details {
-      display: block;
-    }
+  h2 {
+    width: 180px;
+    font-size: 17px;
+    margin: 10px 0;
+    padding: 5px 0;
+    /* border-top: 2px solid
+      ${({ theme }) => {
+      return theme.color.primaryContainer.text;
+    }}; */
+    border-bottom: 2px solid
+      ${({ theme }) => {
+        return theme.color.primaryContainer.text;
+      }};
   }
 
   .create-Category-Form {
     padding: 5px 10px;
     border-radius: 25px;
-    /* background: linear-gradient(to left, #0000ffa3, red); */
-    /* box-shadow: 4px 10px 130px #fff; */
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 8px;
+    gap: 10px;
+    font-size: 18px;
+
+    .category-text {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      font-size: 20px;
+    }
+
+    .form-icon {
+      left: 3px;
+      top: 5px;
+      color: ${({ theme }) => theme.color.textColor};
+      position: absolute;
+    }
+
+    input {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      outline: none;
+      padding: 7px;
+      padding-left: 28px;
+      border-radius: 5px;
+      background: #fff;
+      color: ${({ theme }) => theme.color.textColor};
+      background-color: ${({ theme }) =>
+        theme.color.primaryContainer.Background};
+      border: 1px solid ${({ theme }) => theme.color.textColor};
+    }
+
+    button {
+      margin: 5px 0;
+      padding: 5px 10px;
+      border-radius: 10px;
+      border: none;
+      text-transform: uppercase;
+      font-weight: 600;
+      background: #fff;
+      color: #000;
+    }
+  }
+
+  .cat-list {
+    overflow-y: scroll;
+    /* background: red; */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .recen {
+    border-bottom: 2px solid yellow;
+  }
+  .catContainer {
+    height: 380px;
+
+    overflow-y: scroll;
+    padding: 10px 0;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;

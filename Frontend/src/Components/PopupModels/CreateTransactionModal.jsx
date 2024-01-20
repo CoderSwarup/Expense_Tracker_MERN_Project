@@ -3,11 +3,13 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 import useModal from "../../Hooks/useModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useToast from "../Common/ToastContainerComponent";
+import { CreateNewTransaction } from "../../Store/Actions/IncomeExpenseActions";
 export default function CreateTransactionModal({
   setShowTransactionCreationModal,
 }) {
+  const dispatch = useDispatch();
   const { categoryList } = useSelector((state) => state.category);
   const { isOpen, openModal, closeModal } = useModal();
   const [name, setName] = useState("");
@@ -15,8 +17,12 @@ export default function CreateTransactionModal({
   const [type, setType] = useState("Income");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [date, setDate] = useState("");
+  const [desc, setDesc] = useState("");
+  const [isDisable, setIsDisable] = useState(false);
   const [filteredCategories, setFilteredCategories] = useState([]);
   const { showToast } = useToast();
+
+  //
 
   useEffect(() => {
     openModal();
@@ -29,31 +35,40 @@ export default function CreateTransactionModal({
     );
   }, [type, categoryList]);
 
+  const CloseModel = () => {
+    closeModal();
+    setShowTransactionCreationModal(false);
+  };
   // Handle Create Category
-  const handleCreate = () => {
+  const handleCreate = async () => {
     const selectedCategoryObject = categoryList.find(
       (category) => category.name === selectedCategory
     );
-
     if (
-      [name, type, selectedCategory].some((s) => s.trim() === "") ||
+      [name, type, desc, selectedCategory].some((s) => s.trim() === "") ||
       !date ||
       date === ""
     ) {
       console.log("ee");
       return showToast("All Fields Are Required", "warn");
     }
+    setIsDisable(true);
+    const data = {
+      name,
+      createddate: date,
+      amount,
+      desc,
+      category: selectedCategoryObject._id,
+    };
 
-    // Close the modal after creating the transaction
-    closeModal();
-    setShowTransactionCreationModal(false);
+    await CreateNewTransaction(data, CloseModel, dispatch);
+    setIsDisable(false);
   };
 
   // Handle Cancel
   const handleCancel = () => {
     // Close the modal if cancel is clicked
     closeModal();
-    setShowTransactionCreationModal(false);
   };
 
   return createPortal(
@@ -68,6 +83,21 @@ export default function CreateTransactionModal({
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+              />
+            </InputLabel>
+            <InputLabel>
+              Transaction Description:
+              <textarea
+                style={{
+                  width: "100%",
+                  height: "50px",
+                  resize: "none",
+                  margin: "5px 0",
+                  padding: "5px",
+                }}
+                type="textarea"
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
               />
             </InputLabel>
             <InputLabel>
@@ -93,7 +123,6 @@ export default function CreateTransactionModal({
               <StyledSelect
                 value={selectedCategory}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setSelectedCategory(e.target.value);
                 }}
               >
@@ -116,8 +145,12 @@ export default function CreateTransactionModal({
               />
             </InputLabel>
             <ButtonWrapper>
-              <CancelButton onClick={handleCancel}>Cancel</CancelButton>
-              <CreateButton onClick={handleCreate}>Create</CreateButton>
+              <CancelButton onClick={handleCancel} disabled={isDisable}>
+                Cancel
+              </CancelButton>
+              <CreateButton onClick={handleCreate} disabled={isDisable}>
+                Create
+              </CreateButton>
             </ButtonWrapper>
           </ModalContent>
         </ModalWrapper>
