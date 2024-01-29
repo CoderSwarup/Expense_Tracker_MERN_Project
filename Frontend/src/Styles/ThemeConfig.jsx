@@ -20,6 +20,11 @@ export const LightTheme = {
       text: "#000",
       textlight: "#0000008f",
     },
+    SecondaryContainer: {
+      Background: "#dadada",
+      text: "#fff",
+      textlight: "#ffffff8f",
+    },
     primaryButton: {
       backgroundColor: " #1028c5",
       color: "#ffffff",
@@ -66,6 +71,11 @@ export const DarkTheme = {
       color: "#fff",
     },
     primaryContainer: {
+      Background: "#191c20",
+      text: "#fff",
+      textlight: "#ffffff8f",
+    },
+    SecondaryContainer: {
       Background: "#191c20",
       text: "#fff",
       textlight: "#ffffff8f",

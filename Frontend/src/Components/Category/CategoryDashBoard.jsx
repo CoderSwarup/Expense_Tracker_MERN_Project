@@ -241,11 +241,12 @@ const CategoryWrapper = styled.div`
     }
 
     @media screen and (max-width: 900px) {
+      padding: 5px;
       width: 100%;
     }
     .category {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-evenly;
       align-items: top;
       height: 100%;
       gap: 30px;
@@ -299,7 +300,6 @@ const CategoryWrapper = styled.div`
     @media screen and (max-width: 800px) {
       .category {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 1dr 1fr;
       }
     }
   }

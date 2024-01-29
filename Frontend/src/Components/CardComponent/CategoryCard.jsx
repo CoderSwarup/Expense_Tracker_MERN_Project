@@ -108,8 +108,14 @@ const Wrapper = styled.div`
     font-weight: 700;
     text-transform: uppercase;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 36px;
+    height: 36px;
+
+    @media screen and (max-width: 400px) {
+      width: 26px;
+      height: 26px;
+      font-size: 10px;
+    }
   }
   .category-details {
     margin: 10px 0;

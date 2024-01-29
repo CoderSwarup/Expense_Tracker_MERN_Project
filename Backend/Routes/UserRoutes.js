@@ -9,6 +9,7 @@ const {
   UpdatePasswordController,
   UpdateProfileController,
   VerifyUserController,
+  UpdateProfileAvatar,
 } = require("../Controllers/UserController");
 const { isAuthenticatedUser } = require("../Middleware/auth");
 const UserRouter = express.Router();
@@ -47,4 +48,7 @@ UserRouter.post(
   isAuthenticatedUser,
   UpdateProfileController
 );
+
+// Update Avatar
+UserRouter.put("/update/avatar", isAuthenticatedUser, UpdateProfileAvatar);
 module.exports = UserRouter;

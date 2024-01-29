@@ -14,6 +14,8 @@ export default defineConfig({
       "/auth/forgotpassword": BACKENDURL,
       "/auth/myprofile": BACKENDURL,
       "/auth/verify/user": BACKENDURL,
+      "/auth/update/user/profile": BACKENDURL,
+      "/auth/update/avatar": BACKENDURL,
 
       //income Expense
       "/incomeexpense/findall/incomeexpense": BACKENDURL,

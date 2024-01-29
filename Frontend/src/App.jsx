@@ -76,7 +76,7 @@ function App() {
     <>
       <ThemeProvider theme={Theme}>
         <GlobalStyle></GlobalStyle>
-        <div className="WorkingBox">
+        <div className="WorkingArea">
           <BrowserRouter>
             {loading && <Loading></Loading>}
             <Header theme={theme} setTheme={setTheme}></Header>

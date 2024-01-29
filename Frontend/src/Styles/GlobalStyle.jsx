@@ -83,11 +83,14 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
-.WorkingBox{
+ .WorkingArea{
+    width: 100%;
+    min-height: 100vh;
     overflow-x: hidden;
-}
+} 
 
 
 .StyledSelect {

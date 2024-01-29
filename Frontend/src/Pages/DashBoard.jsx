@@ -74,7 +74,6 @@ export default function DashBoard() {
     }, 0);
     setTotalSpend(totalSpend);
   }, [incomeexpenseslist, currentMonth, numberOfDaysInMonth, selectedType]);
-
   return (
     <DashBoardContainer className="MainContainer">
       <DashBoardHeading></DashBoardHeading>
@@ -88,9 +87,14 @@ export default function DashBoard() {
         <Expenses>
           <h1>New Payments</h1>
           <div className="expense-container">
-            {incomeexpenseslist.map((incomeexpense, i) => {
-              return <TransactionCard key={i} incomeexpense={incomeexpense} />;
-            })}
+            {incomeexpenseslist
+              .slice()
+              .reverse()
+              .map((incomeexpense, i) => {
+                return (
+                  <TransactionCard key={i} incomeexpense={incomeexpense} />
+                );
+              })}
           </div>
         </Expenses>
 

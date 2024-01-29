@@ -356,7 +356,7 @@ exports.UpdatePasswordController = async (req, res) => {
     const { oldpassword, newPassword, confirmpassword } = req.body;
     if (!oldpassword || !newPassword || !confirmpassword) {
       return res.status(500).send({
-        status: false,
+        succcess: false,
         message: "All Fields Are Required",
       });
     }
@@ -379,7 +379,7 @@ exports.UpdatePasswordController = async (req, res) => {
 
     if (!MatchOldPassword) {
       return res.status(500).send({
-        status: false,
+        succcess: false,
         message: "Sorry Old Password Is Not Matched",
       });
     }
@@ -397,7 +397,7 @@ exports.UpdatePasswordController = async (req, res) => {
   } catch (error) {
     // console.log(error);
     return res.status(401).send({
-      status: false,
+      succcess: false,
       message: "Error in UpdatePassword Controller",
     });
   }
@@ -408,35 +408,15 @@ exports.UpdateProfileController = async (req, res) => {
   try {
     let NewUserData = {
       name: req.body.name,
-      // email: req.body.email,
+      monthlyBudget: req.body.monthlyBudget,
     };
 
-    if (!NewUserData.name) {
+    if (!NewUserData.name || !NewUserData.monthlyBudget) {
       return res.status(401).send({
-        status: false,
+        succcess: false,
         message: "Required All fileds",
       });
     }
-
-    // Update Cloudinary Images
-    // if (req.body.avatar !== "") {
-    //   const user = await usersModel.findById(req.user.id);
-
-    //   const imageId = user.avatar.public_id;
-
-    //   await cloudinary.v2.uploader.destroy(imageId);
-
-    //   const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-    //     folder: "samecomm",
-    //     width: 150,
-    //     crop: "scale",
-    //   });
-
-    //   NewUserData.avatar = {
-    //     public_id: myCloud.public_id,
-    //     url: myCloud.secure_url,
-    //   };
-    // }
 
     const user = await userModel.findByIdAndUpdate(req.user._id, NewUserData, {
       new: true,
@@ -455,8 +435,51 @@ exports.UpdateProfileController = async (req, res) => {
     });
   } catch (error) {
     return res.status(401).send({
-      status: false,
+      succcess: false,
       message: "Error in Update Profile",
+    });
+  }
+};
+
+// Const Update Profile Avatar
+exports.UpdateProfileAvatar = async (req, res) => {
+  try {
+    const { avatar } = req.body.avatar;
+    // Update Cloudinary Images
+    if (req.body.avatar === "") {
+      return res.status(401).send({
+        succcess: false,
+        message: "Please Send A Avatar",
+      });
+    }
+
+    const user = await userModel.findById(req.user.id);
+    const imageId = user.avatar.public_id;
+    if (user.avatar.url !== "/Profile.png") {
+      console.log("Done");
+      await cloudinary.v2.uploader.destroy(imageId);
+    }
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "samecomm",
+      width: 150,
+      crop: "scale",
+    });
+    user.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
+
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).send({
+      message: "Image Uploaded Successfuly!",
+      succcess: true,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(401).send({
+      succcess: false,
+      message: "Error in Update Profile Avatar",
     });
   }
 };
